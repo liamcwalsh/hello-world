@@ -17,3 +17,5 @@ router.get('/hello', function(req, res, next) {
 router.get('/optimization',function(req,res,next){
 	res.render('optimization', { title: 'Blog Post'});
 });
+
+router.get('/D3',function(req,res,next){res.render('D3', {title:'D3 Experiment'});})
