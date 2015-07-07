@@ -3,6 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  // this renders views/index.ejs and passes the following data object
   res.render('index', { title: 'Liam\'s Blog' });
 });
 
@@ -19,3 +20,5 @@ router.get('/optimization',function(req,res,next){
 });
 
 router.get('/D3',function(req,res,next){res.render('D3', {title:'D3 Experiment'});})
+
+router.get('/discrete_choice',function(req,res,next){res.render('discrete_choice',{title:'Discrete Choice Model Optimization'})})
