@@ -10,44 +10,33 @@
 
    </head>
    <body>
+<xmp theme="cerulean" style="display:none;">
 
-   	<xmp theme="cerulean" style="display:none;">
-   	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 
-   	<h1> Background </h1>
-   	<p> A common problem in business is the question of what price to charge, or, similarly, how much of a discount to offer on a good. A firm has to balance two, often conflicting restraints. They have to charge a price high enough so that they can maximize their own profit, but they also have to ensure the price is at a level which makes consumers want to buy the good. The question, then, becomes this: How can one optimize the profit, under these restraints? </p>
+## Background
 
-   	<h1> The Discrete Choice Model </h1>
-   	<p> Typically, the higher the price of a good, the less likely a consumer is to purchase that good. Further, the probability of purchase is dependent upon the product itself, the price of the product, and the consumer. In some cases, a firm is able to segment a market into smaller sections, or even down to the individual level. In this model, I assume that the firm in question is able to cater the price to a specific. As such, this allows me to assume that the consumer, and thus the preferences associated with that consumer, remain constant. Next, since we are only discussing a single good, the attributes of the good in the model remain constant as well. Thus, the only thing which will be varied is the price. A common model to employ in this context is the Discrete Choice Model. This model is characterized by how the probability of purchase of a good is defined. In this case, the probability is calculated as a logistic regression model. </p>
+<p> A common problem in business is the question of what price to charge, or, similarly, how much of a discount to offer on a good. A firm has to balance two, often conflicting restraints. They have to charge a price high enough so that they can maximize their own profit, but they also have to ensure the price is at a level which makes consumers want to buy the good. The question, then, becomes this: How can one optimize the profit, under these restraints? </p>
 
-   	<h1> The Logisitic Regression Model </h1>
-   	<p>The logistic regression model takes its name from the fact that it utilizes the logistic function to calculate probability. The logistic function looks like the following: </p>
+## The Discrete Choice Model
+ 
+ <p> Typically, the higher the price of a good, the less likely a consumer is to purchase that good. Further, the probability of purchase is dependent upon the product itself, the price of the product, and the consumer. In some cases, a firm is able to segment a market into smaller sections, or even down to the individual level. In this model, I assume that the firm in question is able to cater the price to a specific. As such, this allows me to assume that the consumer, and thus the preferences associated with that consumer, remain constant. Next, since we are only discussing a single good, the attributes of the good in the model remain constant as well. Thus, the only thing which will be varied is the price. A common model to employ in this context is the Discrete Choice Model. This model is characterized by how the probability of purchase of a good is defined. In this case, the probability is calculated as a logistic regression model. </p>
 
-   	<span class="katex"> P = \frac{e^U}{1+e^U} </span>
+ ## The Logisitic Regression Model
+ <p>The logistic regression model takes its name from the fact that it utilizes the logistic function to calculate probability. The logistic function looks like the following: </p>
+<span class="katex"> P = \frac{e^U}{1+e^U} </span>
 
-   	<img src="/images/blog/lambertw/probvprice.png" style="width: 500px; margin: 0 auto; display: block;"/>
-
-
-
-
+<img src="/images/blog/lambertw/probvprice.png" style="width: 500px; margin: 0 auto; display: block;"/>
+</xmp>
 
 
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
 
-
-
-
-
-
-
-	</xmp>
-	<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-
-	<script type="text/javascript">
-	$(".katex").each(function() {
-  	katex.render(this.innerHTML, this, {displayMode: true });
-	});
-	</script>
+<script type="text/javascript">
+$(".katex").each(function() {
+  katex.render(this.innerHTML, this, {displayMode: true });
+});
+</script>
 	
-	</body>
+  </body>
 </html>
-
