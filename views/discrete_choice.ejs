@@ -29,16 +29,62 @@
 
 <p> Next, the logistic regression model defines U in a more explicit manner. In this case, one can consider U to be the utility of a particular product. For this model, I assumed U to be a linear function of p, the price: </p>
 
+<span class="katex"> U= \alpha + \beta p </span>
 
+<p> n this model, &alpha; is a scalar representing the preferences of a particular consumer with respect to the good in question. &beta;, likewise, is a negative scalar determining how p affects utility, based on the consumer’s preference. When we combine both the logistic function and the utility function, or probability function becomes the following: </p>
 
+<span class="katex"> P = \frac{e^{\alpha + \beta p}{1+e^{\alpha + \beta p}}} </span>
+
+<p> Visually, when α = 4 and β = -.01, the graph of this probability function looks like the following: </p>
 
 <img src="/images/blog/lambertw/probvprice.png" style="width: 500px; margin: 0 auto; display: block;"/>
+
+## Revenue and Profit
+
+<p>For an individual person, the expected revenue is simply the price of the good times the probability of purchase: </p>
+
+<span class="katex"> R=Pp=p\frac{e^U}{1+e^U} </span>
+
+<p> We can extend this model to account for profit, which is defined in the following way, where the variable c represents cost: </p>
+
+<span class="katex"> \pi=Pp - Pc_{marginal} - c_{fixed} </span>
+
+<p> However, the math to optimize this profit function is nearly identical to that of optimizing the revenue function, so for simplicity, I will only use the revenue function. </p>
+
+## Analytic Calculation
+
+<p>While this problem can be solved numerically, often an analytic solution to such a problem helps to reduce computation time, and simplifies the entire process. It can also help to make coding the solution to this problem more straightforward, and easier to read. I seek to maximize profit, with respect to the price, p. This is a standard calculus problem, that is, take the first derivative of profit with respect to p, and set the equation to zero. From there, we must rearrange to find explicitly some optimal price p* in terms of &alpha; and &beta;. First, as the natural logarithm function is monotonic, I can maximize the log of our revenue function, and still preserve the true value of p*. This is merely done for ease of differentiation, not for any technical reason. We have: </p>
+
+<span class="katex"> ln(R)=ln(p) + \alpha + \beta p - ln(1+e^{\alpha+\beta p}) </span>
+
+<p> Deriving with respect to p, then setting the equation equal to 0 yields: </p>
+
+<span class="katex"> 0=\frac{1}{p} + \beta + \frac{\beta e^{\alpha+\beta p}}{1+e^{\alpha+\beta p}} </span>
+
+<p> After some algebraic rearrangement, the following equation is left: </p>
+
+<span class="katex"> e^{\alpha + \beta p} =-( \beta p +1)  </span>
+
+<p> To solve this equation for p*, I discovered the <a href="https://en.wikipedia.org/wiki/Lambert_W_function">Lambert W Function</a> was necessary </p>
+
+## The Lambert W Function
+
+<p>This function, W(x), can be defined implicitly as: </p>
+
+<span class="katex"> x=W(x)e^{W(x)} </span>
+
+<p> nfortunetly, there does not exist a simple equation relaying the value of W(x). Instead, it must be represented in a series expansion, like the following, found from <a href="http://mathworld.wolfram.com/LambertW-Function.html">WolframMathWorld</a>: </p>
+
+<span class="katex"> (x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}, \quad |x|&lt;\frac{1}{e} </span>
+
+
+
 </xmp>
 
 <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
 
 <script type="text/javascript">
- (".katex").each(function() {
+ $(".katex").each(function() {
   katex.render(this.innerHTML, this, {displayMode: true });
 });
 </script>	
