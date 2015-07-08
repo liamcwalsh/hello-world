@@ -5,6 +5,13 @@
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+    <script type="text/javascript">
+ (".katex").each(function() {
+  katex.render(this.innerHTML, this, {displayMode: true });
+});
+</script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css">
 
@@ -12,7 +19,6 @@
    <body>
 <xmp theme="cerulean" style="display:none;">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 
 ## Background
 
@@ -26,17 +32,16 @@
  <p>The logistic regression model takes its name from the fact that it utilizes the logistic function to calculate probability. The logistic function looks like the following: </p>
 <span class="katex"> P = \frac{e^U}{1+e^U} </span>
 
+<p> This is a particularly useful model, as it limits P within [0,1] </p>
+
+<p> Next, the logistic regression model defines U in a more explicit manner. In this case, one can consider U to be the utility of a particular product. For this model, I assumed U to be a linear function of p, the price: </p>
+
+
+
+
 <img src="/images/blog/lambertw/probvprice.png" style="width: 500px; margin: 0 auto; display: block;"/>
 </xmp>
 
-
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-
-<script type="text/javascript">
-$(".katex").each(function() {
-  katex.render(this.innerHTML, this, {displayMode: true });
-});
-</script>
 	
   </body>
 </html>
