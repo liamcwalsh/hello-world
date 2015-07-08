@@ -37,7 +37,7 @@
 
 <p> Visually, when α = 4 and β = -.01, the graph of this probability function looks like the following: </p>
 
-<img src="/images/blog/lambertw/probvprice.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<img src="/images/blog/discrete_choice/probvprice.png" style="width: 500px; margin: 0 auto; display: block;"/>
 
 ## Revenue and Profit
 
@@ -77,7 +77,58 @@
 
 <span class="katex"> (x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}, \quad |x|&lt;\frac{1}{e} </span>
 
+## Finding the Optimal Price
 
+<p> To use the Lambert W function, I had to do some rearrangement, and came up with the following equality: </p>
+
+<span class="katex"> e^{\alpha -1}=-(\beta p +1)e^{-\beta p -1} </span>
+
+<p> Then, after some simple rearrangement, I arrived at an explicit equation for the optimal price, p*: </p>
+
+<span class="katex"> p^*=-\frac{W(e^{\alpha -1}) +1}{\beta} </span>
+
+## Numerical Calculation: Varying &alpha;
+
+<p> In this case, no longer do I seek to find p* through an explicit formula, but instead I have a computer sort through all the values to find a maximum. Typically, the best method of search for a maximum is done through a binary search algorithm. I created 2 graphs in MATLAB. In this first one, I let β=-.1, and varied α between 0 and 10 in .5 step increments. </p>
+
+<img src="/images/blog/discrete_choice/vary_alpha.png" style="width: 500px; margin: 0 auto; display: block;"/>
+
+<p> There are two things which one can immediately glean from this graph. First, one can see that as &alpha; increases, so does p&#42; and the maximum revenue. This is consistent with our findings from the analytic calculations, as &alpha; is found within the Lambert W function, which is increasing. This finding also makes sense on an intuitive level; As &alpha; increases, a customer's utility becomes more heavily defined in terms of the other reasons why the good is desirable. As increases, the consumer becomes more and more interested in the good itself, rather than the price of the good. In this case, one can charge a higher price on the good without affecting the overall utility of the good to a consumer, which leads to higher revenue. </p>
+
+<p> A second finding is that the maxima occur in a linear fashion, which is curious. </p>
+
+
+## Numerical Calculation: Varying &beta;
+
+<p> I also created a graph which shifts β values, from -.05 to -.49, while holding &alpha;=4: </p>
+
+<img src="images/blog/discrete_choice/vary_beta.png" style="width: 500px; margin: 0 auto; display: block;"/>
+
+<p> First, notice that as &beta; increases in magnitude, the optimal price falls, as does the maximum revenue. Not only is this consistent with the analytic solution for p&#42; (since p&#42; is inversely proportional to &beta;), but it also makes logical sense. A larger &beta; means that utility is more heavily affected by the price. The consumer is more concerned about the price of the good, rather than what they like about the good. This then affects the probability function, and the revenue function. </p>
+
+<p> Again, the maxima occur in a near linear fashion. Given that in both cases of varying &alpha; and &beta; that the maxima occur in a linear fashion, there may be some way to find a simpler approximation for p&#42;, perhaps even removing the need for the Lambert W function. </p>
+
+## Comparison of Analytic vs Numerical Calculation
+
+<p> At the end of the day, while it is interesting to find an explicit formula for p&#42;, it is more important to discover if this formula can actually be of any use. First, we can use the explicit formula to determine how accurate the maxima found numerically are: </p>
+
+<img src="images/blog/discrete_choice/alpha_num_vs_analy.png" style="width: 500px; margin: 0 auto; display: block;"/>
+
+<p> Here, the filled orange circles represent the maxima found analytically, and the black, empty circles are the numerically found maxima. Clearly, the numerically found maxima are pretty accurate. I calculated that the percent error was on the scale of 10^-6 </p>
+
+<p>Now that I know that the numerical maxima are accurate, I want to know which method is faster in runtime. </p>
+
+<img src="images/blog/discrete_choice/analy_vs_numer_runtime.png" style="width: 500px; margin: 0 auto; display: block;"/>
+
+<p> The answer, quite clearly, is that the numerical calculation is faster. In this case, the average runtime of the analytic calculation was .0301s, where it only took an average of .00012986s for the numerical calculation. </p>
+
+## Concluding Remarks
+
+<p> Overall, I discovered that while there does exist an explicit equation determining the price which optimizes revenue, it is unfit for practical use as its runtime is too high. However, I also noticed a trend in the maxima when varying &beta; and &alpha;: The maxima occurred in a linear fashion. This seems to indicate that there may be a way to approximate the equation for the optimal price. If so, this raises a few questions: </p>
+
+<p> What is the explicit form of the approximation? </p>
+<p> Is it accurate enough for practical use? </p>
+<p> Is the runtime of the approximation better than that of the simple numerical finding of the optimal price? </p>
 
 </xmp>
 
