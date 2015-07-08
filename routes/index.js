@@ -19,6 +19,10 @@ router.get('/optimization',function(req,res,next){
 	res.render('optimization', { title: 'Blog Post'});
 });
 
-router.get('/D3',function(req,res,next){res.render('D3', {title:'D3 Experiment'});})
+router.get('/D3',function(req,res,next){res.render('D3', {title:'D3 Experiment'});});
 
-router.get('/discrete_choice',function(req,res,next){res.render('discrete_choice',{title:'Discrete Choice Model Optimization'})})
+router.get('/discrete_choice',function(req,res,next){
+	res.render('discrete_choice',{title:'Discrete Choice Model Optimization'});})
+
+router.get('/opt_approx',function(req,res,next){
+	res.render('opt_approx',{title:'Approximation of the Optimal Price'});});
