@@ -34,7 +34,7 @@
 
 <p> n this model, &alpha; is a scalar representing the preferences of a particular consumer with respect to the good in question. &beta;, likewise, is a negative scalar determining how p affects utility, based on the consumer’s preference. When we combine both the logistic function and the utility function, or probability function becomes the following: </p>
 
-<span class="katex"> P = \frac{e^{\alpha + \beta p}{1+e^{\alpha + \beta p}}} </span>
+<span class="katex"> P = \frac{e^{\alpha + \beta p}}{1+e^{\alpha + \beta p}} </span>
 
 <p> Visually, when α = 4 and β = -.01, the graph of this probability function looks like the following: </p>
 
@@ -76,7 +76,7 @@
 
 <p> nfortunetly, there does not exist a simple equation relaying the value of W(x). Instead, it must be represented in a series expansion, like the following, found from <a href="http://mathworld.wolfram.com/LambertW-Function.html">WolframMathWorld</a>: </p>
 
-<span class="katex"> (x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}, \quad |x|&lt;\frac{1}{e} </span>
+<span class="katex"> (x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}, \quad |x| \leq \frac{1}{e}</span>
 
 ## Finding the Optimal Price
 
@@ -131,8 +131,8 @@
 <p> Is it accurate enough for practical use? </p>
 <p> Is the runtime of the approximation better than that of the simple numerical finding of the optimal price? </p>
 
+<!-- xmp goes here-->
 </xmp>
-
 <script src="bower_components/strapdown/strapdown.js"></script>
 <link rel="stylesheet" href="bower_components/strapdown/strapdown.css">
 
