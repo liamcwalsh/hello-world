@@ -4,11 +4,10 @@
     <title><%= title %></title>
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/katex/dist/katex.min.js"></script>
-    <script src="bower_components/strapdown/strapdown.js"></script>
-
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" href="bower_components/katex/dist/katex.min.css">
+    <link rel='stylesheet' href='/stylesheets/cerulean.min.css' />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css">
     
   </head>
   <body>
@@ -17,6 +16,7 @@
 # <%= title %>
 <p>Welcome to my blog</p>
 <p>Click on any dot below to begin</p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <p> Here's some math for you</p>
 <p> <span class="katex">c = \pm\ sqrt(a^2 + b^2)</span> </p>
 
@@ -30,6 +30,8 @@
 </xmp>
 
 
+<script src="bower_components/strapdown/strapdown.js"></script>
+<link rel="stylesheet" href="bower_components/strapdown/strapdown.css">
 
 <script type="text/javascript">
 $(".katex").each(function() {
