@@ -6,8 +6,8 @@
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/cerulean.min.css' />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css">
-    <link rel="stylesheet" href="bower_components/strapdown/strapdown.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css"/>
+    <link rel="stylesheet" href="bower_components/strapdown/strapdown.css"/>
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
    </head>
@@ -15,46 +15,52 @@
 <xmp theme="cerulean" style="display:none;">
 
 <div class="blog content">
-## Background
+##Background
 
 <p> A common problem in business is the question of what price to charge, or, similarly, how much of a discount to offer on a good. A firm has to balance two, often conflicting restraints. They have to charge a price high enough so that they can maximize their own profit, but they also have to ensure the price is at a level which makes consumers want to buy the good. The question, then, becomes this: How can one optimize the profit, under these restraints? </p>
 
-## The Discrete Choice Model
+##The Discrete Choice Model
  
  <p> Typically, the higher the price of a good, the less likely a consumer is to purchase that good. Further, the probability of purchase is dependent upon the product itself, the price of the product, and the specific consumer. In this model, I assume that the firm in question is able to cater the price of the good towards one consumer. As such, this allows me to assume that the consumer, and thus the preferences associated with that consumer, remain constant. Next, since we are only discussing a single good, the attributes of the good in the model remain constant as well. Thus, the only thing which will be varied is the price. A common model to employ in this context is the Discrete Choice Model. </p>
 
  ## The Logistic Model
  <p>The logistic  model takes its name from the fact that it utilizes the logistic function to calculate probability. The logistic function looks like the following: </p>
+
 <span class="katex"> P = \frac{e^U}{1+e^U} </span>
 
 <p> This is a particularly useful model, as it bounds P within [0,1] </p>
 
 <p> Next, the logistic regression model defines U in a more explicit manner. In this case, one can consider U to be the utility of a particular product. For this model, I assumed U to be a linear function of p, the price: </p>
 
-<span class="katex"> U= \alpha + \beta p </span>
+<span class="katex"> U= \alpha - \beta p </span>
 
-<p> n this model, &alpha; is a scalar representing the preferences of a particular consumer with respect to the good in question. &beta;, likewise, is a negative scalar determining how p affects utility, based on the consumer’s preference. When we combine both the logistic function and the utility function, or probability function becomes the following: </p>
+<p> In this model, &alpha; is a scalar representing the preferences of a particular consumer with respect to the good in question. &beta;, likewise, is a scalar determining how p affects utility, based on the consumer’s preference. When we combine both the logistic function and the utility function, or probability function becomes the following: </p>
 
-<span class="katex"> P = \frac{e^{\alpha + \beta p}}{1+e^{\alpha + \beta p}} </span>
+<span class="katex"> P = \frac{e^{\alpha - \beta p}}{1+e^{\alpha - \beta p}} </span>
 
-<p> Visually, when α = 4 and β = -.01, the graph of this probability function looks like the following: </p>
+<p> Visually, the graphs of this probability function looks like the following when varying &beta; and &alpha;, respectively: </p>
 
-<img src="/images/blog/discrete_choice/probvprice.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="/images/blog/discrete_choice/purchprobbeta.png"/>
 
+<img src="/images/blog/discrete_choice/purchprobalpha.png"/>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 ## Analytic Calculation
 
 <p>While this problem can be solved numerically, often an analytic solution to such a problem helps to reduce computation time, and simplifies the entire process. It can also help to make coding the solution to this problem more straightforward, and easier to read. I seek to maximize profit, with respect to the price, p. First, as the natural logarithm function is monotonic, I can maximize the log of our revenue function, and still preserve the true value of p&#42;. This is merely done for ease of differentiation. We have: </p>
 
-<span class="katex"> ln(R)=ln(p) + \alpha + \beta p - ln(1+e^{\alpha+\beta p}) </span>
+<span class="katex"> ln(R)=ln(p) + \alpha - \beta p - ln(1+e^{\alpha-\beta p}) </span>
 
 <p> Deriving with respect to p, then setting the equation equal to 0 yields: </p>
 
-<span class="katex"> 0=\frac{1}{p} + \beta + \frac{\beta e^{\alpha+\beta p}}{1+e^{\alpha+\beta p}} </span>
+<span class="katex"> 0=\frac{1}{p} - \beta + \frac{\beta e^{\alpha-\beta p}}{1+e^{\alpha-\beta p}} </span>
 
 <p> After some algebraic rearrangement, the following equation is left: </p>
 
-<span class="katex"> e^{\alpha + \beta p} =-( \beta p +1)  </span>
+<span class="katex"> e^{\alpha - \beta p} =( \beta p -1)  </span>
 
 <p> To solve this equation for p*, I discovered the <a href="https://en.wikipedia.org/wiki/Lambert_W_function">Lambert W Function</a> was necessary </p>
 
@@ -66,23 +72,25 @@
 
 <p> Unfortunetly, there does not exist a simple equation relaying the value of W(x). Instead, it must be represented in a series expansion, like the following, found from <a href="http://mathworld.wolfram.com/LambertW-Function.html">WolframMathWorld</a>: </p>
 
-<span class="katex"> (x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}, \quad |x| \leq \frac{1}{e}</span>
+<span class="katex"> W(x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}, \quad |x| \leq \frac{1}{e}</span>
 
 ## Finding the Optimal Price
 
 <p> To use the Lambert W function, I had to do some rearrangement, and came up with the following equality: </p>
 
-<span class="katex"> e^{\alpha -1}=-(\beta p +1)e^{-(\beta p +1)} </span>
+<span class="katex"> e^{\alpha -1}=(\beta p -1)e^{(\beta p -1)} </span>
 
 <p> Then, after some simple rearrangement, I arrived at an explicit equation for the optimal price, p*: </p>
 
-<span class="katex"> p^*=-\frac{W(e^{\alpha -1}) +1}{\beta} </span>
+<span class="katex"> p^*=\frac{W(e^{\alpha -1}) +1}{\beta} </span>
 
 ## Numerical Calculation
 
 <p> In this case, no longer do I seek to find p* through an explicit formula, but instead I have a computer sort through all the values to find a maximum. Typically, the best method of search for a maximum is done through a binary search algorithm. I created 2 graphs in MATLAB. In this first one, I let β=-.1, and varied α between 0 and 10 in .5 step increments. </p>
 
-<img src="/images/blog/discrete_choice/vary_alpha.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="/images/blog/discrete_choice/vary_alpha.png"/>
+</div>
 
 <p> There are two things which one can immediately glean from this graph. First, one can see that as &alpha; increases, so does p&#42; and the maximum revenue. This is consistent with our findings from the analytic calculations, as &alpha; is found within the Lambert W function, which is increasing. This finding also makes sense on an intuitive level; As &alpha; increases, a customer's utility becomes more heavily defined in terms of the other reasons why the good is desirable. As increases, the consumer becomes more and more interested in the good itself, rather than the price of the good. In this case, one can charge a higher price on the good without affecting the overall utility of the good to a consumer, which leads to higher revenue. </p>
 
@@ -90,9 +98,11 @@
 
 
 
-<p> I also created a graph which shifts β values, from -.05 to -.49, while holding &alpha;=4: </p>
+<p> I also created a graph which shifts β values, from .05 to .49, while holding &alpha;=4: </p>
 
-<img src="images/blog/discrete_choice/vary_beta.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="images/blog/discrete_choice/vary_beta.png"/>
+</div>
 
 <p> First, notice that as &beta; increases in magnitude, the optimal price falls, as does the maximum revenue. Not only is this consistent with the analytic solution for p&#42; (since p&#42; is inversely proportional to &beta;), but it also makes logical sense. A larger &beta; means that utility is more heavily affected by the price. The consumer is more concerned about the price of the good, rather than what they like about the good. This then affects the probability function, and the revenue function. </p>
 
@@ -102,13 +112,17 @@
 
 <p> At the end of the day, while it is interesting to find an explicit formula for p&#42;, it is more important to discover if this formula can actually be of any use. First, we can use the explicit formula to determine how accurate the maxima found numerically are: </p>
 
-<img src="images/blog/discrete_choice/alpha_num_vs_analy.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="images/blog/discrete_choice/alpha_num_vs_analy.png"/>
+</div>
 
 <p> Here, the filled orange circles represent the maxima found analytically, and the black, empty circles are the numerically found maxima. Clearly, the numerically found maxima are pretty accurate. I calculated that the percent error was on the scale of 10^-6 </p>
 
 <p>Now that I know that the numerical maxima are accurate, I want to know which method is faster in runtime. </p>
 
-<img src="images/blog/discrete_choice/analy_vs_numer_runtime.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="images/blog/discrete_choice/analy_vs_numer_runtime.png"/>
+</div>
 
 <p> The answer, quite clearly, is that the numerical calculation is faster. In this case, the average runtime of the analytic calculation was .0301s, where it only took an average of .00012986s for the numerical calculation. </p>
 
@@ -120,9 +134,15 @@
 <p> Is it accurate enough for practical use? </p>
 <p> Is the runtime of the approximation better than that of the simple numerical finding of the optimal price? </p>
 
-<!-- xmp goes here-->
-</xmp>
+<div class="navigation">
+<p> <a href="/opt_approx"> Next: Approximating the Lambert W Function </a></p>
 </div>
+
+<!-- xmp goes here-->
+</div>
+</xmp>
+
+
 <script src="bower_components/strapdown/strapdown.js"></script>
 
 <script type="text/javascript">
