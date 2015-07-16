@@ -27,5 +27,3 @@ router.get('/discrete_choice',function(req,res,next){
 router.get('/opt_approx',function(req,res,next){
 	res.render('opt_approx',{title:'Approximation of the Optimal Price'});});
 
-router.get('/heroku_tracking',function(req,res,next){ 
-	res.render('heroku_tracking',{title:'Heroku Tracking test page'});});
