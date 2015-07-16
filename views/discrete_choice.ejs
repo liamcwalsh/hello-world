@@ -21,7 +21,7 @@
 
 ##The Discrete Choice Model
  
- <p> Typically, the higher the price of a good, the less likely a consumer is to purchase that good. Further, the probability of purchase is dependent upon the product itself, the price of the product, and the specific consumer. In this model, I assume that the firm in question is able to cater the price of the good towards one consumer. As such, this allows me to assume that the consumer, and thus the preferences associated with that consumer, remain constant. Next, since we are only discussing a single good, the attributes of the good in the model remain constant as well. Thus, the only thing which will be varied is the price. A common model to employ in this context is the Discrete Choice Model. </p>
+ <p> Typically, the higher the price of a good, the less likely a consumer is to purchase that good. Further, the probability of purchase is dependent upon the product itself, the price of the product, and the specific consumer. In this model, assume that the firm in question is able to cater the price of the good towards one consumer. As such, this allows one to assume that the consumer, and thus the preferences associated with that consumer, remain constant. Next, since we are only discussing a single good, the attributes of the good in the model remain constant as well. Thus, the only thing which will be varied is the price. A typical model to employ in this context is the Discrete Choice Model. </p>
 
  ## The Logistic Model
  <p>The logistic  model takes its name from the fact that it utilizes the logistic function to calculate probability. The logistic function looks like the following: </p>
@@ -30,7 +30,7 @@
 
 <p> This is a particularly useful model, as it bounds P within [0,1] </p>
 
-<p> Next, the logistic regression model defines U in a more explicit manner. In this case, one can consider U to be the utility of a particular product. For this model, I assumed U to be a linear function of p, the price: </p>
+<p> Next, the logistic regression model defines U in a more explicit manner. In this case, one can consider U to be the utility of a particular product. For this particular model, U is linear function of p, the price: </p>
 
 <span class="katex"> U= \alpha - \beta p </span>
 
@@ -50,7 +50,7 @@
 
 ## Analytic Calculation
 
-<p>While this problem can be solved numerically, often an analytic solution to such a problem helps to reduce computation time, and simplifies the entire process. It can also help to make coding the solution to this problem more straightforward, and easier to read. I seek to maximize profit, with respect to the price, p. First, as the natural logarithm function is monotonic, I can maximize the log of our revenue function, and still preserve the true value of p&#42;. This is merely done for ease of differentiation. We have: </p>
+<p>While this problem can be solved numerically, often an analytic solution to such a problem helps to reduce computation time, and simplifies the entire process. It can also help to make coding the solution to this problem more straightforward, and easier to read.  To start, maximize profit, with respect to the price, p. Since the natural logarithm function is monotonic, one can maximize the log of the revenue function, and still preserve the true value of p&#42;. This is merely done for ease of differentiation. The equation to maximize becomes the following: </p>
 
 <span class="katex"> ln(R)=ln(p) + \alpha - \beta p - ln(1+e^{\alpha-\beta p}) </span>
 
@@ -76,29 +76,29 @@
 
 ## Finding the Optimal Price
 
-<p> To use the Lambert W function, I had to do some rearrangement, and came up with the following equality: </p>
+<p> To use the Lambert W function, some rearrangement must be done: </p>
 
 <span class="katex"> e^{\alpha -1}=(\beta p -1)e^{(\beta p -1)} </span>
 
-<p> Then, after some simple rearrangement, I arrived at an explicit equation for the optimal price, p*: </p>
+<p> Then, after employing the Lambert W function, then performing some basic algebra, an explicit equation for the optimal price, p&#42; appears: </p>
 
 <span class="katex"> p^*=\frac{W(e^{\alpha -1}) +1}{\beta} </span>
 
 ## Numerical Calculation
 
-<p> In this case, no longer do I seek to find p* through an explicit formula, but instead I have a computer sort through all the values to find a maximum. Typically, the best method of search for a maximum is done through a binary search algorithm. I created 2 graphs in MATLAB. In this first one, I let β=-.1, and varied α between 0 and 10 in .5 step increments. </p>
+<p> In this case, no longer do I seek to find p&#42; through an explicit formula, but instead I have a computer sort through all the values to find a maximum. Typically, the best method of search for a maximum is done through a binary search algorithm. I created 2 graphs in MATLAB. In this first one, I let β=-.1, and varied α between 0 and 10 in .5 step increments. </p>
 
 <div class="images">
 <img src="/images/blog/discrete_choice/vary_alpha.png"/>
 </div>
 
-<p> There are two things which one can immediately glean from this graph. First, one can see that as &alpha; increases, so does p&#42; and the maximum revenue. This is consistent with our findings from the analytic calculations, as &alpha; is found within the Lambert W function, which is increasing. This finding also makes sense on an intuitive level; As &alpha; increases, a customer's utility becomes more heavily defined in terms of the other reasons why the good is desirable. As increases, the consumer becomes more and more interested in the good itself, rather than the price of the good. In this case, one can charge a higher price on the good without affecting the overall utility of the good to a consumer, which leads to higher revenue. </p>
+<p> There are two things which one can immediately glean from this graph. First, one can see that as &alpha; increases, so does p&#42; and the maximum revenue. This is consistent with the findings from the analytic calculations, as &alpha; is found within the Lambert W function, which is increasing. This finding also makes sense on an intuitive level; As &alpha; increases, a customer's utility becomes more heavily defined in terms of the other reasons why the good is desirable. In this case, one can charge a higher price on the good without affecting the overall utility of the good to a consumer, which leads to higher revenue. </p>
 
 <p> A second finding is that the maxima occur in a linear fashion, which is curious. </p>
 
 
 
-<p> I also created a graph which shifts β values, from .05 to .49, while holding &alpha;=4: </p>
+<p> This next graph below shifts &beta; values from .05 to .49, while holding &alpha;=4: </p>
 
 <div class="images">
 <img src="images/blog/discrete_choice/vary_beta.png"/>
@@ -116,9 +116,9 @@
 <img src="images/blog/discrete_choice/alpha_num_vs_analy.png"/>
 </div>
 
-<p> Here, the filled orange circles represent the maxima found analytically, and the black, empty circles are the numerically found maxima. Clearly, the numerically found maxima are pretty accurate. I calculated that the percent error was on the scale of 10^-6 </p>
+<p> Here, the filled orange circles represent the maxima found analytically, and the black, empty circles are the numerically found maxima. Clearly, the numerically found maxima are pretty accurate. The percent error was on the scale of 10^-6 </p>
 
-<p>Now that I know that the numerical maxima are accurate, I want to know which method is faster in runtime. </p>
+<p>Since the numerical maxima are known to be accurate, the n </p>
 
 <div class="images">
 <img src="images/blog/discrete_choice/analy_vs_numer_runtime.png"/>
