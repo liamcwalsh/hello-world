@@ -27,3 +27,5 @@ router.get('/discrete_choice',function(req,res,next){
 router.get('/opt_approx',function(req,res,next){
 	res.render('opt_approx',{title:'Approximation of the Optimal Price'});});
 
+router.get('/no_boot',function(req,res,next){
+	res.render('no_boot');});
