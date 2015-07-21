@@ -19,17 +19,17 @@
 
 <p> In my <a href="http://liamcwalsh.herokuapp.com/discrete_choice">last post</a>, I derived the optimal price for a business to charge to generate maximum revenue under a discrete choice system. Recall that the optimal price took the form: </p>
 
-<span class="katex"> p^*=-\frac{W(e^{ \alpha -1}) +1}{\beta} </span>
+<span class="katex"> p^*=\frac{W(e^{ \alpha -1}) +1}{\beta} </span>
 
 <p>Where &alpha; is a parameter which details how interested the customer is in the product, and &beta; determines how much the price of the good affects the customer's desire to purchase the good. W is the Lambert W function. </p>
 
-<p> Finally, at the end of the post, I discovered that while there is an explicit formula for the optimal price (the equation shown above), computationally, the particular implementation I had used to find the Lambert W function was much slower than a standard numerical optimization. </p>
+<p> Finally, at the end of the post, I discovered that while there is an explicit formula for the optimal price (the equation shown above), computationally, the particular implementation I had used in MATLAB to find the Lambert W function was much slower than a standard numerical optimization. </p>
 
 ## History of the Lambert W Function
 
 <p> The Lambert W Function was first described and studied in 1758 by Johann Heinrich Lambert, while he was trying to solve polynomial equations. Euler then took those results, and discovered the Tree Function, T(x), which is very closely related to the Lambert W function: <p>
 
-<span class="katex"> T(z)=-W(-z)</span>
+<span class="katex"> T(x)=-W(-x)</span>
 
 <p> Euler's results went mostly unused and undeveloped for a number of years, until, in the 1900s, the W function began to show up in the solutions to equations detailing a variety of physical phenomena. It finally was recognized for its importance when it provided an exact solution to a question in quantum mechanics which had stumped physicists for some time.</p>
 
@@ -61,13 +61,11 @@
 
 ## Second Order Approximation
 
-<p> The first order approximation found above is helpful, but very limited. For one, even at x=4, the error is still greater than 10%. Further, if one wanted a better accuracy, x would have to be larger. In the context of the optimal price discussion, this means increasing &alpha;, which means dealing exclusively with consumers who are very interested in the product. This limits the use of the first order approximation severely, since the whole market of people of might buy the good are not composed solely of people who are interested in the good. </p>
-
-<p> Luckily enough, however, <a href="http://mathworld.wolfram.com/LambertW-Function.html"> Wolfram Mathworld</a> has an equation for the second order approximation of the Lambert W function: </p>
+<p>The first order approximation is helpful, but a 10% error is pretty large. Luckily enough, however, <a href="http://mathworld.wolfram.com/LambertW-Function.html"> Wolfram Mathworld</a> has an equation for the second order approximation of the Lambert W function: </p>
 
 <span class="katex"> W(x)=ln(x)-ln(ln(x))+\frac{ln(ln(x))}{ln(x)}+o(2) </span>
 
-<p> Or, for this purposes: </p>
+<p> Or, for this purpose: </p>
 
 <span class="katex"> W(e^x)=x-ln(x)+\frac{ln(x)}{x}+o(2) </span>
 
@@ -93,15 +91,15 @@
 
 <p> Now that we have these approximations for the Lambert W function, we can examine it in the context of the optimal price equation. We know that the first order approximation for W(e^x) is accurate for x&gt;4. Thus, in this model, the first order approximation is accurate for &alpha;-1&gt;4, or, &alpha;&gt;5. Conceptually, what does this mean? Recall that &alpha; represents the preferences of a consumer regarding this particular good. However, these preferences are not dependent on price. One can think of these preferences of the aspects of the good the consumer finds appealing. For example, if we consider a computer to be the good in question, &alpha; represents how much the consumer likes the speed, design, battery life, etc. of the computer. A large &alpha;, then, means that the good on its own is already very appealing to the consumer. Referring back to the computer example, it means that this consumer is already pretty hooked on the computer. They like how fast it is, and are in love with the design. Thus, this approximation can be used when, and only when, the consumer is already interested in the product. </p>
 
-<p> The second order approximation, however, is accurate for x&gt;1, or &alpha;&gt;2. In this case, we are no longer restricted to consumers who are already very interested in the good, but instead, we can consider any consumer, regardless of interest in the product. </p>
+<p> The second order approximation, however, is accurate for x&gt;0, or &alpha;&gt;1. In this case, we are no longer restricted to consumers who are already very interested in the good, but instead, we can consider any consumer, regardless of interest in the product. </p>
 
-<p> Finally, the third order approximation performed the best overall.  Just like the second order approximation, it is accurate for x&gt;1, or &alpha;&gt;2. </p>
+<p> Finally, the third order approximation performed the best overall.  Just like the second order approximation, it is accurate for x&gt;0, or &alpha;&gt;1. </p>
 
 ## Computation Speed
 
-<p> While finding the explicit formulas for the Lambert W function approximations is interesting, the true purpose of these approximations is to make the Lambert W function more usable, in a sense. That is, it is to reduce the difficulty of using the Lambert W function by providing an accurate, but fairly straightforward approximation for the function. For our purposes, we want to know the runtimes of the approximations, to see if they can viable replace the simple numerical search for the optimal price. </p>
+<p> While finding the explicit formulas for the Lambert W function approximations is interesting, the true purpose of these approximations is to make the Lambert W function more usable, in a sense. For this purpose, we want to know the runtimes of the approximations, to see if they can viably replace the simple numerical search for the optimal price. </p>
 
-<p> First, I compared the runtimes between all three approximations:</p>
+<p> The graph below is a comparison of the runtimes of all three approximations.</p>
 
 <img src="/images/blog/lambertapprox/approx_runtime_comp.png" style="width: 500px; margin: 0 auto; display: block;"/> 
 
@@ -110,18 +108,23 @@
 
 <img src="/images/blog/lambertapprox/numer_vs_approx_runtime.png" style="width: 500px; margin: 0 auto; display: block;"/> 
 
-<p> In this case, I compared the runtime of the 1st order approximation, which clocked in at an average time of 3.6267*10^-7 s. The numerical runtime, however, was significantly slower, taking, on average, .0301s. </p>
+<p> In this case, the 1st order approximation clocked in at an average time of 3.6267*10^-7 s. The numerical runtime, however, was significantly slower, taking, on average, .0301s.  These runtimes were from MATLAB. </p>
 
 ## Conclusion
 
 <p> In this post, I tested various approximations to the Lambert W function, with a fairly great deal of success, as not only were the approximations accurate, the runtimes of the approximations were fast.</p>
 
-<p> An important point to note, however, is the range of x values within which the approximation works.  While it does hold for all values of x, for x&lt;0, the approximation will provide an imaginary answer.  This is a result of the fact that at x&lt;(-1/e), the Lambert W function takes on imaginary values.</p>
+<p> An important point to note, however, is the range of x values within which the approximation works.  While it does hold for all values of x, for x&lt;0, the approximation is no longer usuable. For (-1/e)&lt;x&lt;0, the Lambert W function outputs multiple values, some of which are imaginary.  For x&gt;(-1/e), the Lambert W function becomes fully imaginary. </p>
+
+<p> In the case of the optimal pricing analysis, while e^&alpha; tends to infinity as &alpha; goes to infinity, the approximation involves natural logarithms, which do not combine with negative values well. As such, the approximation is only good for &alpha;&gt;0. </p>
 
 <p> For a more detailed look at both the uses of the W function, and the derivation of the approximation used, <a href="https://cs.uwaterloo.ca/research/tr/1993/03/W.pdf">this paper</a> is a fantastic resource.</p>
 
+<p> <a href="/discrete_choice">Previous: Discrete Choice Model Optimization </a></p>
+
 </xmp>
 </div>
+
 
 <script src="bower_components/strapdown/strapdown.js"></script>
 <link rel="stylesheet" href="bower_components/strapdown/strapdown.css">

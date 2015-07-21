@@ -15,30 +15,30 @@
 <xmp theme="cerulean" style="display:none;">
 
 <div class="blog content">
-##Background
+<h2>Background</h2>
 
-<p> A common problem in business is the question of what price to charge, or, similarly, how much of a discount to offer on a good. A firm has to balance two, often conflicting restraints. They have to charge a price high enough so that they can maximize their own profit, but they also have to ensure the price is at a level which makes consumers want to buy the good. The question, then, becomes this: How can one optimize the profit, under these restraints? </p>
+<p> A common problem in business is the question of what price to charge, or, similarly, how much of a discount to offer on a good. A firm has to balance two conflicting restraints. They have to charge a price high enough so that they can maximize their own profit, while still setting the price low enough so that it is appealing to consumers. The question, then, becomes this: How can one optimize the profit, under these restraints? </p>
 
-##The Discrete Choice Model
+<h2>The Discrete Choice Model</h2>
  
- <p> Typically, the higher the price of a good, the less likely a consumer is to purchase that good. Further, the probability of purchase is dependent upon the product itself, the price of the product, and the specific consumer. In this model, assume that the firm in question is able to cater the price of the good towards one consumer. As such, this allows one to assume that the consumer, and thus the preferences associated with that consumer, remain constant. Next, since we are only discussing a single good, the attributes of the good in the model remain constant as well. Thus, the only thing which will be varied is the price. A typical model to employ in this context is the Discrete Choice Model. </p>
+ <p> Typically, the higher the price of a good, the less likely a consumer is to purchase that good. Further, the probability of purchase is dependent upon the product itself, the price of the product, and the specific consumer. In this model, assume that the firm in question is able to cater the price of the good towards one consumer. As such, this allows one to assume that the consumer, and thus the preferences associated with that consumer, remain constant. Next, since we are only discussing a single good, the attributes of the good in the model remain constant as well. Thus, the only thing which will be varied is the price. These assumptions are what comprise the Discrete Choice Model. </p>
 
- ## The Logistic Model
+ <h2>The Logistic Model</h2>
  <p>The logistic  model takes its name from the fact that it utilizes the logistic function to calculate probability. The logistic function looks like the following: </p>
 
 <span class="katex"> P = \frac{e^U}{1+e^U} </span>
 
 <p> This is a particularly useful model, as it bounds P within [0,1] </p>
 
-<p> Next, the logistic regression model defines U in a more explicit manner. In this case, one can consider U to be the utility of a particular product. For this particular model, U is linear function of p, the price: </p>
+<p> Next, one can consider U to be the utility of a particular product. For this particular model, U is linear function of p, the price: </p>
 
 <span class="katex"> U= \alpha - \beta p </span>
 
-<p> In this model, &alpha; is a scalar representing the preferences of a particular consumer with respect to the good in question. &beta;, likewise, is a scalar determining how p affects utility, based on the consumer’s preference. When we combine both the logistic function and the utility function, or probability function becomes the following: </p>
+<p> Here, &alpha; is a scalar representing the preferences of a particular consumer with respect to the good in question. &beta; is a scalar determining how p affects utility, based on the consumer’s preference. When one combines both the logistic function and the utility function, the full Discrete Choice Model appears, with the probability function taking the following form: </p>
 
-<span class="katex"> P = \frac{e^{\alpha - \beta p}}{1+e^{\alpha - \beta p}} </span>
+<span class="katex"> P = \frac{e^{\alpha - \beta p}}{1+e^{\alpha - \beta p}} = \frac{1}{1+e^{\beta p-\alpha}} </span>
 
-<p> Visually, the graphs of this probability function looks like the following when varying &beta; and &alpha;, respectively: </p>
+<p> Visually, the graphs of this probability function look like the following when varying &beta; and &alpha;, respectively: </p>
 
 <div class="images">
 <img src="/images/blog/discrete_choice/purchprobbeta.png"/>
@@ -50,7 +50,13 @@
 
 ## Analytic Calculation
 
-<p>While this problem can be solved numerically, often an analytic solution to such a problem helps to reduce computation time, and simplifies the entire process. It can also help to make coding the solution to this problem more straightforward, and easier to read.  To start, maximize profit, with respect to the price, p. Since the natural logarithm function is monotonic, one can maximize the log of the revenue function, and still preserve the true value of p&#42;. This is merely done for ease of differentiation. The equation to maximize becomes the following: </p>
+<p>While this problem can be solved numerically, often an analytic solution to such a problem helps to reduce computation time, and simplifies the entire process. It can also help to make coding the solution to this problem more straightforward, and easier to read.</p>
+
+<p>The problem is to maximize total expected revenue, which is given by the the probability function times the price: </p>
+
+<span class='katex'> E[R]=\frac{e^U}{1+e^U} * p </span>
+
+<p>Next, maximize the expected revenue with respect to the price, p. Since the natural logarithm function is monotonic, one can maximize the log of the revenue function, and still preserve the true value of p&#42;. This is merely done for ease of differentiation. The equation to maximize becomes the following: </p>
 
 <span class="katex"> ln(R)=ln(p) + \alpha - \beta p - ln(1+e^{\alpha-\beta p}) </span>
 
@@ -62,7 +68,7 @@
 
 <span class="katex"> e^{\alpha - \beta p} =( \beta p -1)  </span>
 
-<p> To solve this equation for p*, I discovered the <a href="https://en.wikipedia.org/wiki/Lambert_W_function">Lambert W Function</a> was necessary </p>
+<p> To solve this equation for p&#42;, I discovered the <a href="https://en.wikipedia.org/wiki/Lambert_W_function">Lambert W Function</a> was necessary </p>
 
 ## The Lambert W Function
 
@@ -70,9 +76,11 @@
 
 <span class="katex"> x=W(x)e^{W(x)} </span>
 
-<p> Unfortunetly, there does not exist a simple equation relaying the value of W(x). Instead, it must be represented in a series expansion, like the following, found from <a href="http://mathworld.wolfram.com/LambertW-Function.html">WolframMathWorld</a>: </p>
+<p> Unfortunately, there does not exist a simple equation relaying the value of W(x). Instead, it must be represented in a series expansion, like the following, found from <a href="http://mathworld.wolfram.com/LambertW-Function.html">WolframMathWorld</a>: </p>
 
-<span class="katex"> W(x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}, \quad |x| \leq \frac{1}{e}</span>
+<span class="katex"> W(x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n}</span>
+
+<p> This series converges for |x|&lt;(1/e) </p>
 
 ## Finding the Optimal Price
 
@@ -80,19 +88,23 @@
 
 <span class="katex"> e^{\alpha -1}=(\beta p -1)e^{(\beta p -1)} </span>
 
-<p> Then, after employing the Lambert W function, then performing some basic algebra, an explicit equation for the optimal price, p&#42; appears: </p>
+<p> Then, after employing the Lambert W function: </p>
+
+<span class="katex"> W(e^{\alpha-1})=\beta p -1 </span>
+ 
+ <p>Finally, after performing some algebra, an explicit equation for the optimal price, p&#42; appears: </p>
 
 <span class="katex"> p^*=\frac{W(e^{\alpha -1}) +1}{\beta} </span>
 
 ## Numerical Calculation
 
-<p> In this case, no longer do I seek to find p&#42; through an explicit formula, but instead I have a computer sort through all the values to find a maximum. Typically, the best method of search for a maximum is done through a binary search algorithm. I created 2 graphs in MATLAB. In this first one, I let β=-.1, and varied α between 0 and 10 in .5 step increments. </p>
+<p> In this case, no longer do I seek to find p&#42; through an explicit formula, but instead I have a computer sort through all the values to find a maximum. Below are two graphs created in MATLAB. In this first one, β=.1, and &alpha; varies between 0 and 10 in .5 step increments. </p>
 
 <div class="images">
 <img src="/images/blog/discrete_choice/vary_alpha.png"/>
 </div>
 
-<p> There are two things which one can immediately glean from this graph. First, one can see that as &alpha; increases, so does p&#42; and the maximum revenue. This is consistent with the findings from the analytic calculations, as &alpha; is found within the Lambert W function, which is increasing. This finding also makes sense on an intuitive level; As &alpha; increases, a customer's utility becomes more heavily defined in terms of the other reasons why the good is desirable. In this case, one can charge a higher price on the good without affecting the overall utility of the good to a consumer, which leads to higher revenue. </p>
+<p> There are two things which one can immediately glean from this graph. First, one can see that as &alpha; increases, so does p&#42; and the maximum revenue. This finding makes sense on an intuitive level; As &alpha; increases, a customer's utility becomes more heavily defined in terms of the other reasons why the good is desirable. In this case, one can charge a higher price on the good without affecting the overall utility of the good to a consumer, which leads to higher revenue. </p>
 
 <p> A second finding is that the maxima occur in a linear fashion, which is curious. </p>
 
@@ -106,11 +118,11 @@
 
 <p> First, notice that as &beta; increases in magnitude, the optimal price falls, as does the maximum revenue. Not only is this consistent with the analytic solution for p&#42; (since p&#42; is inversely proportional to &beta;), but it also makes logical sense. A larger &beta; means that utility is more heavily affected by the price. The consumer is more concerned about the price of the good, rather than what they like about the good. This then affects the probability function, and the revenue function. </p>
 
-<p> Again, the maxima occur in a near linear fashion. Given that in both cases of varying &alpha; and &beta; that the maxima occur in a linear fashion, there may be some way to find a simpler approximation for p&#42;, perhaps even removing the need for the Lambert W function. </p>
+<p> Again, the maxima occur in a near linear fashion. Given that in both cases of varying &alpha; and &beta; that the maxima occur in a linear fashion, there may be some way to find a simpler approximation for p&#42;. </p>
 
 ## Comparison of Analytic vs Numerical Calculation
 
-<p> At the end of the day, while it is interesting to find an explicit formula for p&#42;, it is more important to discover if this formula can actually be of any use. First, we can use the explicit formula to determine how accurate the maxima found numerically are: </p>
+<p> While it is interesting to find an explicit formula for p&#42;, it is more important to discover if this formula can actually be of any use. First, we can use the explicit formula to determine how accurate the maxima found numerically are: </p>
 
 <div class="images">
 <img src="images/blog/discrete_choice/alpha_num_vs_analy.png"/>
@@ -118,13 +130,13 @@
 
 <p> Here, the filled orange circles represent the maxima found analytically, and the black, empty circles are the numerically found maxima. Clearly, the numerically found maxima are pretty accurate. The percent error was on the scale of 10^-6 </p>
 
-<p>Since the numerical maxima are known to be accurate, the n </p>
+<p>Since the numerical maxima are known to be accurate, one might wonder which method arrives at the optimal price faster. </p>
 
 <div class="images">
 <img src="images/blog/discrete_choice/analy_vs_numer_runtime.png"/>
 </div>
 
-<p> The answer, quite clearly, is that the numerical calculation is faster. In this case, the average runtime of the analytic calculation was .0301s, where it only took an average of .00012986s for the numerical calculation. </p>
+<p> The answer, quite clearly, is that the numerical calculation is faster. In this case, the average runtime of the analytic calculation was .0301s, where it only took an average of .00012986s for the numerical calculation. Both of these calculations come from analysis of runtimes in MATLAB. </p>
 
 ## Concluding Remarks
 
@@ -134,7 +146,7 @@
 <p> Is it accurate enough for practical use? </p>
 <p> Is the runtime of the approximation better than that of the simple numerical finding of the optimal price? </p>
 
-<div class="navigation">
+<div class="next">
 <p> <a href="/opt_approx"> Next: Approximating the Lambert W Function </a></p>
 </div>
 
