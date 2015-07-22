@@ -29,3 +29,6 @@ router.get('/opt_approx',function(req,res,next){
 
 router.get('/no_boot',function(req,res,next){
 	res.render('no_boot');});
+
+router.get('/graph',function(req,res,next){
+	res.render('graphpage');});
