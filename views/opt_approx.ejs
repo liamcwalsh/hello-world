@@ -15,7 +15,7 @@
 <xmp theme="cerulean" style="display:none;">
 <div class="blog content">
 
-## Background
+<h2>Background</h2>
 
 <p> In my <a href="http://liamcwalsh.herokuapp.com/discrete_choice">last post</a>, I derived the optimal price for a business to charge to generate maximum revenue under a discrete choice system. Recall that the optimal price took the form: </p>
 
@@ -25,7 +25,7 @@
 
 <p> Finally, at the end of the post, I discovered that while there is an explicit formula for the optimal price (the equation shown above), computationally, the particular implementation I had used in MATLAB to find the Lambert W function was much slower than a standard numerical optimization. </p>
 
-## History of the Lambert W Function
+<h2>History of the Lambert W Function</h2>
 
 <p> The Lambert W Function was first described and studied in 1758 by Johann Heinrich Lambert, while he was trying to solve polynomial equations. Euler then took those results, and discovered the Tree Function, T(x), which is very closely related to the Lambert W function: <p>
 
@@ -33,13 +33,15 @@
 
 <p> Euler's results went mostly unused and undeveloped for a number of years, until, in the 1900s, the W function began to show up in the solutions to equations detailing a variety of physical phenomena. It finally was recognized for its importance when it provided an exact solution to a question in quantum mechanics which had stumped physicists for some time.</p>
 
-## Approximating the Lambert W Function
+<h2>Approximating the Lambert W Function</h2>
 
 <p> The main reason why the explicit equation is too slow to use is because of the Lambert W function. The implementation which MATLAB employs is slow, resulting in a larger runtime. </p>
 
 <p> However, if you look at a graph of W(e^x), you can notice one thing right away: </p>
 
+<div class="images">
 <img src="/images/blog/lambertapprox/lambert_exp_graph.png"/>
+</div>
 
 <p> The graph is nearly linear, which would indicate that perhaps there exists a fairly simple approximation to the Lambert W function, which could significantly improve the runtime of the analytic calculation fo the optimal price. </p>
 
@@ -55,11 +57,14 @@
 
 <p> This approximation is fairly accurate. The graph below shows W(e^x)/(x-ln(x)), which approaches 1 as the approximation becomes more accurate: </p>
 
-<img src="/images/blog/lambertapprox/first_order_lamb_approx.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="/images/blog/lambertapprox/1st_ord_lambapprox.png"/>
+</div>
+<br>
 
-<p>Clearly, this approximation is not perfect. To be more precise, when x=4, the error between the approximation and the actual value was 10.86% </p>
+<p>Clearly, this approximation is not perfect. To be more precise, when x=4, the error between the approximation and the actual value was 10.86%. </p>
 
-## Second Order Approximation
+<h2>Second Order Approximation</h2>
 
 <p>The first order approximation is helpful, but a 10% error is pretty large. Luckily enough, however, <a href="http://mathworld.wolfram.com/LambertW-Function.html"> Wolfram Mathworld</a> has an equation for the second order approximation of the Lambert W function: </p>
 
@@ -71,11 +76,14 @@
 
 <p> This approximation is very accurate: </p>
 
-<img src="/images/blog/lambertapprox/second_order_lamb_approx.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="/images/blog/lambertapprox/2nd_ord_lambapprox.png"/>
+</div>
+<br>
 
-<p> The reason why the x values start at 1 is because the approximation does not hold for x=0, as that results in division by 0. Also, at x=1, the graph is at 1 on the y-axis. This is because W(e)=1, and the approximation=1 for x=1. At x=2, the error is only 6.18%, which is already much better than the first order approximation, for a lower x value. </p>
+<p> At x=2, the error is only 6.18%, which is already much better than the first order approximation, for a lower x value. However, for x&lt;1, the approximation becomes wildly unusable. </p>
 
-## Third Order Approximation
+<h2>Third Order Approximation</h2>
 
 <p> Again, from <a href="http://mathworld.wolfram.com/LambertW-Function.html"> Wolfram MathWorld </a>, there is a third order approximation to the Lambert W function, which, when using W(e^x), takes the following form:</p>
 
@@ -83,44 +91,55 @@
 
 <p> This approximation, as expected, is the most accurate so far: </p>
 
-<img src="/images/blog/lambertapprox/third_order_lamb_approx.png" style="width: 500px; margin: 0 auto; display: block;"/>
+<div class="images">
+<img src="/images/blog/lambertapprox/3rd_ord_lambapprox.png"/>
+</div>
+<br>
 
-<p> Here, the approximation starts extremely close to 1, indicating that it is very accurate. For x=2, the percent error was only 1.09%. </p>
+<p> Here, the approximation starts extremely close to 1, indicating that it is very accurate. For x=2, the percent error was only 1.09%. Nevertheless, like the second order approximation, it is inaccurate for x&lt;1. </p>
 
-## Approximation and the Optimal Price
+<h2>Approximation and the Optimal Price</h2>
 
 <p> Now that we have these approximations for the Lambert W function, we can examine it in the context of the optimal price equation. We know that the first order approximation for W(e^x) is accurate for x&gt;4. Thus, in this model, the first order approximation is accurate for &alpha;-1&gt;4, or, &alpha;&gt;5. Conceptually, what does this mean? Recall that &alpha; represents the preferences of a consumer regarding this particular good. However, these preferences are not dependent on price. One can think of these preferences of the aspects of the good the consumer finds appealing. For example, if we consider a computer to be the good in question, &alpha; represents how much the consumer likes the speed, design, battery life, etc. of the computer. A large &alpha;, then, means that the good on its own is already very appealing to the consumer. Referring back to the computer example, it means that this consumer is already pretty hooked on the computer. They like how fast it is, and are in love with the design. Thus, this approximation can be used when, and only when, the consumer is already interested in the product. </p>
 
-<p> The second order approximation, however, is accurate for x&gt;0, or &alpha;&gt;1. In this case, we are no longer restricted to consumers who are already very interested in the good, but instead, we can consider any consumer, regardless of interest in the product. </p>
+<p> The second order approximation, however, is accurate for x&gt;1, or &alpha;&gt;2. In this case, we are no longer restricted to consumers who are already very interested in the good, but instead, we can consider any consumer, regardless of interest in the product. </p>
 
-<p> Finally, the third order approximation performed the best overall.  Just like the second order approximation, it is accurate for x&gt;0, or &alpha;&gt;1. </p>
+<p> Finally, the third order approximation performed the best overall.  Just like the second order approximation, it is accurate for x&gt;1, or &alpha;&gt;2. </p>
 
-## Computation Speed
+<h2>Computation Speed</h2>
 
 <p> While finding the explicit formulas for the Lambert W function approximations is interesting, the true purpose of these approximations is to make the Lambert W function more usable, in a sense. For this purpose, we want to know the runtimes of the approximations, to see if they can viably replace the simple numerical search for the optimal price. </p>
 
 <p> The graph below is a comparison of the runtimes of all three approximations.</p>
 
-<img src="/images/blog/lambertapprox/approx_runtime_comp.png" style="width: 500px; margin: 0 auto; display: block;"/> 
+<div class="images">
+<img src="/images/blog/lambertapprox/approx_runtime_comp.png"/> 
+</div>
+<br>
 
-<p> With runtimes of around 3*10^-7, these approximations are fast, and effectively interchangeable speedwise. However, we want to know if these approximations are faster than the typical numerical search:
+<p> With runtimes of around 3&#42;10^-7, these approximations are fast, and effectively interchangeable speedwise. However, we want to know if these approximations are faster than the typical numerical search:
 </p>
 
-<img src="/images/blog/lambertapprox/numer_vs_approx_runtime.png" style="width: 500px; margin: 0 auto; display: block;"/> 
+<div class="images">
+<img src="/images/blog/lambertapprox/numer_vs_approx_runtime.png"/> 
+</div>
+<br>
 
 <p> In this case, the 1st order approximation clocked in at an average time of 3.6267*10^-7 s. The numerical runtime, however, was significantly slower, taking, on average, .0301s.  These runtimes were from MATLAB. </p>
 
-## Conclusion
+<h2>Conclusion</h2>
 
 <p> In this post, I tested various approximations to the Lambert W function, with a fairly great deal of success, as not only were the approximations accurate, the runtimes of the approximations were fast.</p>
 
-<p> An important point to note, however, is the range of x values within which the approximation works.  While it does hold for all values of x, for x&lt;0, the approximation is no longer usuable. For (-1/e)&lt;x&lt;0, the Lambert W function outputs multiple values, some of which are imaginary.  For x&gt;(-1/e), the Lambert W function becomes fully imaginary. </p>
+<p> An important point to note, however, is the range of x values within which the approximation works.  While it does hold for all values of x, for x&lt;1, the approximation is no longer usuable. Since the approxmation has x values in the denominator of some of the fractions, smaller x values cause the approximation to blow up, and therefore become innaccurate. For (-1/e)&lt;x&lt;0, the Lambert W function outputs multiple values, some of which are imaginary.  For x&gt;(-1/e), the Lambert W function becomes fully imaginary. </p>
 
 <p> In the case of the optimal pricing analysis, while e^&alpha; tends to infinity as &alpha; goes to infinity, the approximation involves natural logarithms, which do not combine with negative values well. As such, the approximation is only good for &alpha;&gt;0. </p>
 
-<p> For a more detailed look at both the uses of the W function, and the derivation of the approximation used, <a href="https://cs.uwaterloo.ca/research/tr/1993/03/W.pdf">this paper</a> is a fantastic resource.</p>
+<p> For a more detailed look at both the uses of the W function, and the derivation of the approximation used, <a href="https://cs.uwaterloo.ca/research/tr/1993/03/W.pdf">this paper</a> by R.M Corless, G.H. Gonnet, D.E.G. Hare, D.J. Jeffrey, and D.E. Knuth is a fantastic resource.</p>
 
+<div class="previous">
 <p> <a href="/discrete_choice">Previous: Discrete Choice Model Optimization </a></p>
+</div>
 
 </xmp>
 </div>
