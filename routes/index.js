@@ -25,10 +25,13 @@ router.get('/discrete_choice',function(req,res,next){
 	res.render('discrete_choice',{title:'Discrete Choice Model Optimization'});})
 
 router.get('/opt_approx',function(req,res,next){
-	res.render('opt_approx',{title:'Approximation of the Optimal Price'});});
+	res.render('opt_approx',{title:'Approximation of the Lambert W Function'});});
 
 router.get('/no_boot',function(req,res,next){
 	res.render('no_boot');});
 
 router.get('/graph',function(req,res,next){
 	res.render('graphpage');});
+
+router.get('/navbar',function(req,res,next){
+	res.render('navbar');});
