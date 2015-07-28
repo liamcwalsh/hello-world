@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Optimal price in discrete choice models</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<link rel="apple-touch-icon" href="/images/protobi-logo-e-icon.png">
+
+
+
+	<link rel='stylesheet' href='/stylesheets/style.css'/>
+	<script type="text/javascript" src="/bower_components/d3/d3.min.js"></script>
+	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/lambertw.js"></script>
+	<style>
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: black;
+			shape-rendering: crispEdges;
+		}
+
+		.hover {
+			stroke: #fc0;
+			stroke-width: 4px;
+		}
+
+		.axis text {
+			font-family: sans-serif;
+			font-size: 11px;
+		}
+		.label {
+			font-family: sans-serif;
+			font-size: 14px ;
+			font-weight: normal;
+
+		}
+	</style>
+</head>
+
+
+<body >
+
+	<div class="thumbnail" id="plot-w">Plot W(exp(x)) vs x goes here...</div>
+	<div class="thumbnail" id="plot-exp-w">Plot W(exp(x)) vs x goes here...</div>
+	<div class="thumbnail" id="plot-tetration">Plot W(exp(x)) vs x goes here...</div>
+	<div class="thumbnail" id="plot-profit">Plot W(exp(x)) vs x goes here...</div>
+</body>	
+<script>
+
+//==================================================================================================
+get_pstar = function (alpha, beta) {
+	return ( W(Math.exp(alpha - 1)) + 1) / beta;
+}
+
+//==================================================================================================
+// only the primary branch for now...
+var W = function (x) {
+	var result = gsl_sf_lambert_W0_e(x);
+	return result.val;
+};
+
+
+//==================================================================================================
+var logistic = function (alpha, beta, price) {
+	var util = alpha - beta * price;
+	var prob = 1 / (Math.exp(-util) + 1);
+	return prob;
+}
+
+//==================================================================================================
+var rows = [];
+for (var i = 0; i < 10; i++) {
+	rows[i] = {
+		alpha: -4.0 + i * 1,
+		beta: 0.008,
+		coa: 1000,
+	}
+	rows[i].price =  get_pstar(rows[i].alpha, rows[i].beta);
+}
+
+
+//==================================================================================================
+var plot_function = function (el, attributes) {
+	var self = this;
+	this.$el = $(el);
+	this.el = this.$el[0]
+	this.attributes = attributes;
+
+	var svg = this.svg = d3.select(this.el).html('').append('svg')
+	.style('height', this.attributes.height)
+	.style('width', this.attributes.width);
+
+	xScale = d3.scale.linear()
+	.domain(this.attributes.xAxisDomain)
+	.range([this.attributes.margin.left, this.attributes.width - this.attributes.margin.right]);
+
+	yScale = d3.scale.linear()
+	.domain(this.attributes.yAxisDomain)
+	.range([this.attributes.height - this.attributes.margin.bottom, this.attributes.margin.top]);
+
+	xAxis = d3.svg.axis()
+	.scale(xScale)
+	.orient('bottom')
+	.ticks(this.attributes.xTicks || 5)
+	.tickFormat(d3.format(this.attributes.xAxisFmt))
+	;
+
+	yAxis = d3.svg.axis()
+	.scale(yScale)
+	.ticks(5)
+	.orient('left')
+	.tickFormat(d3.format(this.attributes.yAxisFmt))
+	;
+
+	svg.append('g')
+	.attr('class', 'axis')
+	.attr('transform', "translate(0, " + (yScale(0)) + ")")
+	.call(xAxis);
+
+	svg.append('g')
+	.attr('class', 'axis')
+	.attr('transform', "translate(" + (xScale(0))+ ", 0)")
+	.call(yAxis);
+
+	var gradient = svg.append("svg:defs")
+	.append("svg:linearGradient")
+	.attr("id", "gradient")
+	.attr("x1", "0%")
+	.attr("y1", "100%")
+	.attr("x2", "100%")
+	.attr("y2", "100%")
+
+	gradient.append("svg:stop")
+	.attr("offset", "0%")
+	.attr("stop-color", "#36f")
+	.attr("stop-opacity", 0.2);
+
+	gradient.append("svg:stop")
+	.attr("offset", "50%")
+	.attr("stop-color", "#36f")
+	.attr("stop-opacity", 1);
+
+	gradient.append("svg:stop")
+	.attr("offset", "100%")
+	.attr("stop-color", "#fff")
+	.attr("stop-opacity", 0.1);
+
+	svg.append("text")
+	.attr("class", "x label")
+	.attr("text-anchor", "end")
+	.attr("x", this.attributes.width / 2)
+	.attr("y", this.attributes.height - 6)
+	.text(this.attributes.xAxisTitle);
+
+	svg.append("text")
+	.attr("class", "y label")
+	.attr("transform", "rotate(-90)")
+	.attr("x", 0 - (this.attributes.height / 2))
+	.attr("dy", "1em")
+	.style("text-anchor", "middle")
+	.html(this.attributes.yAxisTitle);
+
+
+
+	var line = d3.svg.line()
+	.x(function (point) {
+		return xScale(point.x);
+	})
+	.y(function (point) {
+		return yScale(point.y);
+	});
+
+
+	var line = svg.append("path")
+	.attr("d", line(attributes.points))
+	.attr("stroke", "blue")
+	.attr("stroke-width", 1)
+	.attr("fill", "none")
+	.style("stroke", "url(#gradient)")
+	.on("mouseover", function (d) {
+		d3.select(this).classed("hover", true);
+	})
+	.on("mouseout", function (d) {
+		d3.select(this).classed("hover", false);
+	});
+	;
+
+
+	return this;
+}
+
+//==================================================================================================
+
+var points = [] ; // arra5 of [{x: 0, y:0}, {x:0.1, y:0.618}, ...]
+for (var x = 4; x >= -1/Math.exp(1); x -= 0.01) {
+	points.push({
+		x: x, 
+		y: gsl_sf_lambert_W0(x)
+	})
+}
+for (var x =-1/Math.exp(1); x < 0; x += 0.01) {
+	points.push({
+		x: x, 
+		y: gsl_sf_lambert_Wm1(x)
+	})
+}
+
+plot_function("#plot-w", {
+	width: 300,
+	height: 300,
+
+	xAxisTitle: 'x',
+	yAxisTitle: 'W(x)',
+	yAxisDomain: [-2, 2],
+	xAxisDomain: [-1, 4],
+	yAxisFmt: '.0f',
+	xAxisFmt: '.0f',
+	//yFunc: function (x) {	return gsl_sf_lambert_W0(Math.exp(x));},
+	points: points,
+	margin: {
+		top: 30,
+		left: 30,
+		bottom: 30,
+		right: 30
+	}
+});
+
+//================
+
+var points = [] ; // arra5 of [{x: 0, y:0}, {x:0.1, y:0.618}, ...]
+for (var x = -2; x <=6; x += 0.1) {
+	points.push({
+		x: x, 
+		y: gsl_sf_lambert_W0(Math.exp(x))
+	})
+}
+
+plot_function("#plot-exp-w", {
+	width: 300,
+	height: 300,
+
+	xAxisTitle: 'x',
+	yAxisTitle: 'W(exp(x))',
+	yAxisDomain: [0, 4],
+	xAxisDomain: [-2, 6],
+	yAxisFmt: '.0f',
+	xAxisFmt: '.0f',
+	//yFunc: function (x) {	return gsl_sf_lambert_W0(Math.exp(x));},
+	points: points,
+	margin: {
+		top: 30,
+		left: 30,
+		bottom: 30,
+		right: 30
+	}
+});
+
+//================
+
+var points = [] ; // arra5 of [{x: 0, y:0}, {x:0.1, y:0.618}, ...]
+var xDomain = [
+	Math.exp(-Math.exp(1)),
+	Math.exp(Math.exp(-1))
+]
+for (var x = xDomain[0]; x <= xDomain[1]; x += (xDomain[1] - xDomain[0])/100) {
+	points.push({
+		x: x, 
+		y: -gsl_sf_lambert_W0(-Math.log(x))/Math.log(x)
+	})
+}
+
+plot_function("#plot-tetration", {
+	width: 300,
+	height: 300,
+	xTicks: 4,
+	xAxisTitle: 'x',
+	yAxisTitle: 'W(exp(x))',
+	yAxisDomain: [0, 2],
+	xAxisDomain: [0,1.5],
+	yAxisFmt: '.1f',
+	xAxisFmt: '.1f',
+	//yFunc: function (x) {	return gsl_sf_lambert_W0(Math.exp(x));},
+	points: points,
+	margin: {
+		top: 30,
+		left: 60,
+		bottom: 30,
+		right: 30
+	}
+});
+
+
+</script>
