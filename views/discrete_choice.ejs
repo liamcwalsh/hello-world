@@ -7,12 +7,103 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/cerulean.min.css' />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css"/>
-    <link rel="stylesheet" href="bower_components/strapdown/strapdown.css"/>
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
    </head>
+   <style>
+ 
+nav {
+ 
+  width: 100%;
+
+  position: fixed;
+
+  top: 0;
+ 
+   }
+ 
+nav ul {
+ 
+  list-style: none;
+ 
+  overflow: hidden; }
+ 
+nav ul li {
+ 
+  float: left;
+ 
+  width: 25%; }
+ 
+nav ul li a {
+ 
+  text-align: center;
+ 
+  padding: 12px 0;
+ 
+  display: block;
+ 
+  width: 100%;
+ 
+  background: #4169e1; /* Old browsers */
+ 
+  background: -moz-linear-gradient(top, #00bfff 0%, #32cbff 100%); /* FF3.6+ */
+ 
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00bfff), color-stop(100%,#32cbff)); /* Chrome,Safari4+ */
+ 
+  background: -webkit-linear-gradient(top, #00bfff 0%,#32cbff 100%); /* Chrome10+,Safari5.1+ */
+ 
+  background: -o-linear-gradient(top, #00bfff 0%,#32cbff 100%); /* Opera 11.10+ */
+ 
+  background: linear-gradient(to bottom, #00bfff 0%,#32cbff 100%); /* W3C, IE10+ */
+ 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00bfff', endColorstr='#32cbff',GradientType=0 ); /* IE6-9 */
+ 
+  endColorstr='#32cbff',GradientType=0 ); /* IE6-9 */
+ 
+}
+ 
+nav ul li a,
+ 
+nav ul li a:focus,
+ 
+nav ul li a:visited,
+ 
+nav ul li a:hover,
+ 
+nav ul li a:active {
+ 
+  color: #000;
+ 
+  text-decoration: none; }
+ 
+nav ul li a:hover,
+ 
+nav ul li a:active {
+ 
+  background: #19a2d1; /* Old browsers */
+ 
+  background: -moz-linear-gradient(top, #19a2d1 0%, #66cle0 100%); /* FF3.6+ */
+ 
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#19a2d1), color-stop(100%,#66cle0)); /* Chrome,Safari4+ */
+ 
+  background: -webkit-linear-gradient(top, #19a2d1 0%,#66cle0 100%); /* Chrome10+,Safari5.1+ */
+ 
+  background: -o-linear-gradient(top, #19a2d1 0%,#66cle0 100%); /* Opera 11.10+ */
+ 
+  background: linear-gradient(to bottom, #19a2d1 0%,#66cle0 100%); /* W3C, IE10+ */
+ 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#19a2d1', endColorstr='#66cle0',GradientType=0 ); /* IE6-9 */
+ 
+}
+ 
+  </style>
+
    <body>
-<xmp theme="cerulean" style="display:none;">
+<br><br>
+
+<div class="blog title">
+<h1> Discrete Choice Model Optimization </h1>
+</div>
 
 <div class="blog content">
 <h2>Background</h2>
@@ -46,9 +137,8 @@
 <img src="/images/blog/discrete_choice/purchprobalpha.png"/>
 </div>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-## Analytic Calculation
+<h2>Analytic Calculation</h2>
 
 <p>While this problem can be solved numerically, often an analytic solution to such a problem helps to reduce computation time, and simplifies the entire process. It can also help to make coding the solution to this problem more straightforward, and easier to read.</p>
 
@@ -70,7 +160,7 @@
 
 <p> To solve this equation for p&#42;, I discovered the <a href="https://en.wikipedia.org/wiki/Lambert_W_function">Lambert W Function</a> was necessary </p>
 
-## The Lambert W Function
+<h2>The Lambert W Function</h2>
 
 <p>This function, W(x), can be defined implicitly as: </p>
 
@@ -82,7 +172,7 @@
 
 <p> This series converges for |x|&lt;(1/e) </p>
 
-## Finding the Optimal Price
+<h2>Finding the Optimal Price</h2>
 
 <p> To use the Lambert W function, some rearrangement must be done: </p>
 
@@ -96,7 +186,7 @@
 
 <span class="katex"> p^*=\frac{W(e^{\alpha -1}) +1}{\beta} </span>
 
-## Numerical Calculation
+<h2>Numerical Calculation</h2>
 
 <p> In this case, no longer do I seek to find p&#42; through an explicit formula, but instead I have a computer sort through all the values to find a maximum. Below are two graphs created in MATLAB. In this first one, β=.1, and &alpha; varies between 0 and 10 in .5 step increments. </p>
 
@@ -120,7 +210,7 @@
 
 <p> Again, the maxima occur in a near linear fashion. Given that in both cases of varying &alpha; and &beta; that the maxima occur in a linear fashion, there may be some way to find a simpler approximation for p&#42;. </p>
 
-## Comparison of Analytic vs Numerical Calculation
+<h2>Comparison of Analytic vs Numerical Calculation</h2>
 
 <p> While it is interesting to find an explicit formula for p&#42;, it is more important to discover if this formula can actually be of any use. First, we can use the explicit formula to determine how accurate the maxima found numerically are: </p>
 
@@ -138,7 +228,7 @@
 
 <p> The answer, quite clearly, is that the numerical calculation is faster. In this case, the average runtime of the analytic calculation was .0301s, where it only took an average of .00012986s for the numerical calculation. Both of these calculations come from analysis of runtimes in MATLAB. </p>
 
-## Concluding Remarks
+<h2>Concluding Remarks</h2>
 
 <p> Overall, I discovered that there does exist an explicit equation determining the price which optimizes revenue. I also noticed a trend in the maxima when varying &beta; and &alpha;: The maxima occurred in a linear fashion. This seems to indicate that there may be a way to approximate the equation for the optimal price. If so, this raises a few questions: </p>
 
@@ -146,16 +236,27 @@
 <p> Is it accurate enough for practical use? </p>
 <p> Is the runtime of the approximation better than that of the simple numerical finding of the optimal price? </p>
 
-<div class="next">
-<p> <a href="/opt_approx"> Next: Approximating the Lambert W Function </a></p>
-</div>
 
 <!-- xmp goes here-->
 </div>
-</xmp>
 
+<nav>
+  <ul>
+    <li>
+       <a href="/">Home</a>
+    </li>
+    <li>
+      <a href="/">Previous</a>
+    </li>
+    <li>
+      <a href="/opt_approx">Next</a>
+    </li>
+    <li>
+      <a href="#">About</a>
+    </li>
+  </ul>
+</nav>
 
-<script src="bower_components/strapdown/strapdown.js"></script>
 
 <script type="text/javascript">
  $(".katex").each(function() {
