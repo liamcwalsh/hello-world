@@ -26,6 +26,7 @@
    <p> text </p>
    <p> Now that we have these approximations for the Lambert W function, we can examine it in the context of the optimal price equation. We know that the first order approximation for W(e^x) is accurate for x&gt;4. Thus, in this model, the first order approximation is accurate for &alpha;-1&gt;4, or, &alpha;&gt;5. Conceptually, what does this mean? Recall that &alpha; represents the preferences of a consumer regarding this particular good. However, these preferences are not dependent on price. One can think of these preferences of the aspects of the good the consumer finds appealing. For example, if we consider a computer to be the good in question, &alpha; represents how much the consumer likes the speed, design, battery life, etc. of the computer. A large &alpha;, then, means that the good on its own is already very appealing to the consumer. Referring back to the computer example, it means that this consumer is already pretty hooked on the computer. They like how fast it is, and are in love with the design. Thus, this approximation can be used when, and only when, the consumer is already interested in the product. </p>
 
+<img src="/images/blog/lambertapprox/lambert_exp_graph.png"/>
 <p> The second order approximation, however, is accurate for x&gt;1, or &alpha;&gt;2. In this case, we are no longer restricted to consumers who are already very interested in the good, but instead, we can consider any consumer, regardless of interest in the product. </p>
 
 <p> Finally, the third order approximation performed the best overall.  Just like the second order approximation, it is accurate for x&gt;1, or &alpha;&gt;2. </p>
@@ -33,6 +34,7 @@
 <h2> Computation Speed </h2>
 
 <p> While finding the explicit formulas for the Lambert W function approximations is interesting, the true purpose of these approximations is to make the Lambert W function more usable, in a sense. That is, it is to reduce the difficulty of using the Lambert W function by providing an accurate, but fairly straightforward approximation for the function. For our purposes, we want to know the runtimes of the approximations, to see if they can viable replace the simple numerical search for the optimal price. </p>
+
 
 </body>
 </html>
