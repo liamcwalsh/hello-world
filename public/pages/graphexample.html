@@ -1,20 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>Optimal price in discrete choice models</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="HandheldFriendly" content="true">
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<link rel="apple-touch-icon" href="/images/protobi-logo-e-icon.png">
-
-
-
+	<title>Fun with the W Function</title>
 	<link rel='stylesheet' href='/stylesheets/style.css'/>
 	<script type="text/javascript" src="/bower_components/d3/d3.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/lambertw.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.js"></script>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css"/>
 	<style>
 		.axis path,
 		.axis line {
@@ -24,7 +17,6 @@
 		}
 
 		.hover {
-			stroke: #fc0;
 			stroke-width: 4px;
 		}
 
@@ -38,16 +30,105 @@
 			font-weight: normal;
 
 		}
+		h1,p {
+			text-align: center;
+		}
+		h2 {
+			text-align: center;
+			color: #317eac;
+		}
+
 	</style>
 </head>
 
 
-<body >
+<body>
 
-	<div class="thumbnail" id="plot-w">Plot W(exp(x)) vs x goes here...</div>
-	<div class="thumbnail" id="plot-exp-w">Plot W(exp(x)) vs x goes here...</div>
-	<div class="thumbnail" id="plot-tetration">Plot W(exp(x)) vs x goes here...</div>
-	<div class="thumbnail" id="plot-profit">Plot W(exp(x)) vs x goes here...</div>
+	<a name="top"><h1> Fun With the Lambert W Function </h1></a>
+
+	<p> The <a href="https://en.wikipedia.org/wiki/Lambert_W_function">Lambert W Function</a> is a very interesting function with a variety of uses. Click on any of the graphs to discover more </p>
+
+	<a href="#lambertw"><div class="thumbnail" id="plot-w">Plot W(exp(x)) vs x goes here..</div></a>
+
+	<a href="#explambert"><div class="thumbnail" id="plot-exp-w">Plot W(exp(x)) vs x goes here...</div></a>
+
+	<a href="#powertower"><div class="thumbnail" id="plot-tetration">Plot W(exp(x)) vs x goes here...</div></a>
+
+	<a href="#opt-price"><div class="thumbnail" id="plot-profit">Plot W(exp(x)) vs x goes here...</div></a>
+
+	<a href="#zipfslaw"><div class="thumbnail" id="zipf-law">Plot W(exp(x)) vs x goes here...</div> </a>
+
+	<div class="blog content">
+
+	<a name="lambertw"><h2> Graph of the Lambert W Function </h2></a> 
+	<p> This is a graph of the simple Lambert W function. Implicitly, it is defined as the inverse of</p>
+
+	<span class="katex"> f(W)=We^W </span>
+
+	<p> As far as the actual graph is concerned, it is a well behaved function for positive values. For x less than 0, the function becomes multivalued, up until x=(1/e). Then, the function branches off into the imaginary plane.</p>
+
+	<p> There is an explicit equation which defines this function. It takes the form: </p>
+
+	<span class="katex"> W(x)=\sum_{n=1}^{\infty} {\frac{(-1)^{n-1} (n^{n-2})}{(n-1)!} x^n} </span>
+
+	<p> <a href="#top">Back to the graphs </a></p>
+
+	<a name="explambert"> <h2> Graph of W(e^x)</h2></a>
+
+	<p> This graph shows the relationship between x and W(e^x). What is most interesting about this graph is the near-linearity it exhibits. There is a very good reason for this behavior. This near-linearity also makes for easy approximating. For a more formal discussion about this, I direct you to <a href="/opt_approx">this page </a> of my blog</p>
+
+	<p> <a href="#top">Back to the graphs </a></p>
+
+	<a name="powertower"> <h2> The Power Tower </h2></a>
+
+	<p> This is the graph of what is called the <a href="http://mathworld.wolfram.com/PowerTower.html"> Power Tower.</a> The Power Tower is a function of the form: </p>
+
+	<span class="katex"> h(z)=z^{z^{z^{...}}} </span>
+
+	<p> That is, this function is z to the power of z to the power of z on and on to infinity. This operation is known as tetration. Further, there is a simple mathematical symbol which describes tetration, called the Knuth Up Arrow:</p>
+
+	<span class="katex"> z \uparrow \uparrow \infty = z^{z^{z^{...}}} </span> 
+
+	<p> Here, z is the number to be tetrated, and infinity is the number of tetrations, that is, how many times you raise z to the z power. </p>
+
+	<p> Interestingly enough, there is a simple equation that exists which can be used to calculate the value of the Power Tower for a given z. It involves the Lambert W function: </p>
+
+	<span class="katex"> h(z) = -\frac{W(-ln(z))}{ln(z)}</span>
+
+	<p> <a href="#top">Back to the graphs </a></p>
+
+	<a name="opt-price"> <h2> Optimal Pricing Analysis </h2></a>
+
+	<p> This graph shows a typical price vs. revenue graph. The W Function appears when trying to find the price which maximizes revenue. For a simple discrete choice model, the maximum price p&#42; takes the following form: </p>
+
+	<span class="katex"> p^*=\frac{W(e^{\alpha -1}) +1}{\beta} </span>
+
+	<p> A more formal discussion regarding pricing can be found at <a href="/discrete_choice"> this blog page </a> </p>
+
+	<p> <a href="#top">Back to the graphs </a></p>
+
+	<a name="zipfslaw"> <h2> Zipfs Law, Heaps' Law, and the W Function </h2> </a>
+
+	<p> To discuss what this graph is, we must first discuss both Zipf's Law and Heaps' Law. <a href="https://en.wikipedia.org/wiki/Zipf%27s_law"> Zipf's Law </a> is an empiraclly derived equation in linguistics, which states that the frequency of a word is inversely proportional to its frequency ranking. More formally, </p>
+
+	<span class="katex"> z(r)= \frac{z_{max}}{r^{\alpha}} </span>
+
+	<p> Where z_max is the maximum frequency of a word occurence, and &alpha; is the Zipf's exponent, which is experimentally derived. </p>
+
+	<p> Next, there is <a href="https://en.wikipedia.org/wiki/Heaps%27_law">Heaps' Law,</a> which is another empirical law that describes the number of distinct words in a document, depending on the document length. It is written as: </p>
+
+	<span class="katex"> N(t)=t^{\lambda} </span>
+
+	<p> Where t is the number of words, and &lambda; is another experimentally derived parameter. </p>
+
+	<p> The Lambert W function appears when trying to relate Zipf's law and Heaps' law. In the special case when &alpha;, Zipf's Exponent, is equal to 1, Heaps' law can be rewritten as: </p>
+
+	<span class="katex"> N(t)=\frac{t}{W(t)} </span>
+
+	<p> This was result derived in <a href='http://arxiv.org/pdf/1002.3861v2.pdf'>this paper.</a></p>
+	<p> <a href="#top">Back to the graphs </a></p>
+
+	</div>
 </body>	
 <script>
 
@@ -210,8 +291,8 @@ for (var x =-1/Math.exp(1); x < 0; x += 0.01) {
 }
 
 plot_function("#plot-w", {
-	width: 300,
-	height: 300,
+	width: 150,
+	height: 150,
 
 	xAxisTitle: 'x',
 	yAxisTitle: 'W(x)',
@@ -240,8 +321,8 @@ for (var x = -2; x <=6; x += 0.1) {
 }
 
 plot_function("#plot-exp-w", {
-	width: 300,
-	height: 300,
+	width: 150,
+	height: 150,
 
 	xAxisTitle: 'x',
 	yAxisTitle: 'W(exp(x))',
@@ -254,7 +335,7 @@ plot_function("#plot-exp-w", {
 	margin: {
 		top: 30,
 		left: 30,
-		bottom: 30,
+		bottom: 40,
 		right: 30
 	}
 });
@@ -263,8 +344,8 @@ plot_function("#plot-exp-w", {
 
 var points = [] ; // arra5 of [{x: 0, y:0}, {x:0.1, y:0.618}, ...]
 var xDomain = [
-	Math.exp(-Math.exp(1)),
-	Math.exp(Math.exp(-1))
+Math.exp(-Math.exp(1)),
+Math.exp(Math.exp(-1))
 ]
 for (var x = xDomain[0]; x <= xDomain[1]; x += (xDomain[1] - xDomain[0])/100) {
 	points.push({
@@ -274,11 +355,11 @@ for (var x = xDomain[0]; x <= xDomain[1]; x += (xDomain[1] - xDomain[0])/100) {
 }
 
 plot_function("#plot-tetration", {
-	width: 300,
-	height: 300,
+	width: 150,
+	height: 150,
 	xTicks: 4,
 	xAxisTitle: 'x',
-	yAxisTitle: 'W(exp(x))',
+	yAxisTitle: 'Power Tower',
 	yAxisDomain: [0, 2],
 	xAxisDomain: [0,1.5],
 	yAxisFmt: '.1f',
@@ -288,10 +369,74 @@ plot_function("#plot-tetration", {
 	margin: {
 		top: 30,
 		left: 60,
-		bottom: 30,
+		bottom: 35,
 		right: 30
 	}
 });
 
+//=========================
 
+var points = [] ; // array of [{x: 0, y:0}, {x:0.1, y:0.618}, ...]
+for (var x=0; x<=100; x +=1) {
+	points.push({
+		x: x, 
+		y: x/(1+Math.exp(.1*x - 7))
+	})
+}
+
+
+plot_function("#plot-profit", {
+	width: 150,
+	height: 150,
+	xTicks: 3,
+	xAxisTitle: 'x',
+	yAxisTitle: 'Revenue',
+	yAxisDomain: [0, 80],
+	xAxisDomain: [0,100],
+	yAxisFmt: '.1f',
+	xAxisFmt: '.1f',
+	//yFunc: function (x) {	return gsl_sf_lambert_W0(Math.exp(x));},
+	points: points,
+	margin: {
+		top: 30,
+		left: 60,
+		bottom: 35,
+		right: 30
+	}
+});
+//=====================
+
+var points = [] ; // array of [{x: 0, y:0}, {x:0.1, y:0.618}, ...]
+for (var x=1; x<=100; x +=1) {
+	points.push({
+		x: x, 
+		y: x/gsl_sf_lambert_W0(x)
+	})
+}
+
+plot_function("#zipf-law", {
+	width: 150,
+	height: 150,
+	xTicks: 3,
+	xAxisTitle: 'x',
+	yAxisTitle: "Heaps' Law",
+	yAxisDomain: [0, 80],
+	xAxisDomain: [0,100],
+	yAxisFmt: '.1f',
+	xAxisFmt: '.1f',
+	//yFunc: function (x) {	return gsl_sf_lambert_W0(Math.exp(x));},
+	points: points,
+	margin: {
+		top: 30,
+		left: 60,
+		bottom: 35,
+		right: 30
+	}
+});	
 </script>
+<script type="text/javascript">
+ $(".katex").each(function() {
+  katex.render(this.innerHTML, this, {displayMode: true });
+});
+</script>
+</html>
