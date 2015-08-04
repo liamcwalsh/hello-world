@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= title %></title>
+	<script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+	<link rel='stylesheet' href='/stylesheets/style.css'/>
+
+</head>
+
+<body>
+
+	<svg width="500" height="500">
+		<rect x="0" y="0" width="100" height="10" style="fill:blue"/>
+		<circle cx="25" cy="25" r="20" fill="yellow" stroke="orange" stroke-width="5"/>
+		<ellipse cx="100" cy="400" rx="100" ry="25"/>
+		<line x1="0" y1="0" x2="500" y2="50" stroke="red"/>
+
+		<!-- rgba controls for transparency of the image, between 0 and 1 -->
+
+		<circle cx="200" cy="200" r="40" fill="rgba(128,0,128,.75)" stroke="rgba(0,255,0,.25)" stroke-width="20"/>
+		<circle cx="250" cy="200" r="40" fill="rgba(0,255,0,.75)" stroke="rgba(0,0,255,.25)" stroke-width="20"/>
+		<circle cx="300" cy="200" r="40" fill="rgba(255,255,0,.75)" stroke="rgba(255,0,0,.25)" stroke-width="20"/>
+	</svg>
+	<script type="text/javascript">
+
+		//"body" refers to the body tag, p refers to the paragraph tag, new paragraph with text created
+
+		var dataset=[5,10,15,20,25];
+
+		d3.select("body").selectAll("p").data(dataset).enter().append("p")
+		.text(function(d) { return "I can count to " + d; }).style("color",function(d) {
+			if (d<15){
+				return "red";
+			} else {
+				return "black";
+			}
+		});
+
+		// selectAll chooses all the paragraphs, uses .data(dataset) to determine number, .enter is there since there are no paragraphs to selct yet. The .append(p) turns the .element() into a p
+
+		var barData = [];
+		for (var i=0; i<25; i++) {
+			var newNumber= Math.random()*30;
+			barData.push(newNumber);
+		}
+
+		d3.select("body").selectAll("div").data(barData).enter().append("div").attr("class","bar")
+		.style("height",function(d) {
+			var barHeight = d * 5;
+			return barHeight + "px";
+		});
+
+		// .style changes the style of the object on the spot, .attr accesses the css stylesheet
+
+		var svg = d3.select("body").append("svg"); //makes using .attr much easier
+
+		var h = 100;
+		var w = 500;
+		var barPadding = 1;
+
+		var circles = svg.selectAll("circle")
+			.data(dataset)
+			.enter()
+			.append("circle");
+
+
+
+		circles.attr("cx", function(d,i) {
+			return (i*50) + 25;
+		})
+		.attr("cy",h/2)
+		.attr("r",function(d){
+			return d;
+		})
+		.attr("fill","blue")
+		.attr("stroke","green")
+		.attr("stroke-width",function(d){
+			return d/2;
+		});
+
+	</script>
+
+</body>
+</html>

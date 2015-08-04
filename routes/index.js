@@ -35,3 +35,9 @@ router.get('/graph',function(req,res,next){
 
 router.get('/navbar',function(req,res,next){
 	res.render('navbar');});
+
+router.get('/svg_exp',function(req,res,next){
+	res.render('svg_exp',{title: 'SVG Examples'});});
+
+router.get('/barchart',function(req,res,next){
+	res.render('barchart',{title: 'SVG Barchart'});});
