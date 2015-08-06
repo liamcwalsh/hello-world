@@ -41,3 +41,6 @@ router.get('/svg_exp',function(req,res,next){
 
 router.get('/barchart',function(req,res,next){
 	res.render('barchart',{title: 'SVG Barchart'});});
+
+router.get('/scatter',function(req,res,next){
+	res.render('scatterplot',{title: 'SVG Scatter'});});
