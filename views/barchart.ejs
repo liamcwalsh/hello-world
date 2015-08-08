@@ -8,71 +8,117 @@
 	</style>
 </head>
 <body>
+	<p>Click on this text to update the chart with new values</p>
 	<script type="text/javascript">
 
-			//Width and height
-			var w = 500;
-			var h = 100;
-			var barPadding = 1;
-			
-			var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+		//Width and height
+		var w = 600;
+		var h = 250;
+		var barPadding = 1;
+	
+		var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
 			11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
 			
-			//Create SVG element
-			var svg = d3.select("body")
-			.append("svg")
-			.attr("width", w)
-			.attr("height", h);
+		//Create SVG element
+		var svg = d3.select("body")
+		.append("svg")
+		.attr("width", w)
+		.attr("height", h);
 
+		var xScale = d3.scale.ordinal()
+		.domain(d3.range(dataset.length)) // range returns sequential numbers, as many as length
+		.rangeRoundBands([0,w],.05); // divides space into round chunks, with .05% spacing for 
+									// each chunk
 
-			svg.selectAll("rect")
-			.data(dataset)
-			.enter()
-			.append("rect")
-			.attr("x", function(d, i) {
-				return i * (w / dataset.length);
-			})
-			.attr("y", function(d) {
-				return h - (d * 4);
-			})
-			.attr("width", w / dataset.length - barPadding)
-			.attr("height", function(d) {
-				return d * 4;
-			})
-			.attr("fill", function(d) {
-				return "rgb(0,0," + (d*10) + ")";
+		var yScale = d3.scale.linear()
+		.domain([0, d3.max(dataset)])
+		.range([0, h]);
+
+		svg.selectAll("rect")
+		.data(dataset)	
+		.enter()
+		.append("rect")
+		.attr("x", function(d, i) {
+			return xScale(i);
+		})
+		.attr("y", function(d) {
+			return h - yScale(d);
+		})
+		.attr("width", xScale.rangeBand())
+		.attr("height", function(d) {
+			return yScale(d);
+		})
+		.attr("fill", function(d) {
+			return "rgb(0,0," + (d*10) + ")";
+		});
+
+		svg.selectAll("text")
+		.data(dataset)
+		.enter()
+		.append("text")
+		.text(function(d){
+			return d;
+		})   
+		.attr("x", function(d, i) {
+			return xScale(i) + xScale.rangeBand() / 2; //halfway across
+		})
+		.attr("y", function(d) {
+			return h - yScale(d) + 14;
+		})
+		.attr("font-family","sans-serif")
+		.attr("fill","white")
+		.attr("font-size","11px")
+		.attr("text-anchor","middle");
+
+		d3.select("p")
+			.on("click",function() {
+
+				var numValues = dataset.length;
+				dataset=[];
+				for (var i=0; i<numValues; i++) {
+					var newNumber = Math.floor(Math.random()*25);
+					dataset.push(newNumber);
+				}
+
+				yScale.domain([0,d3.max(dataset)]);
+
+				svg.selectAll("rect")
+				.data(dataset)
+				.transition() //this goes after data selection, before changes to transition
+				.delay(function(d,i){
+					return i/dataset.length * 1000;
+				}) // controls time to begin trans
+				.duration(3000) //control trans speed in ms, put after trans,
+				.ease("elastic") // controls how trans, normally just slow, fast, slow again
+				.attr("y",function(d){
+					return h-yScale(d);
+				})
+				.attr("height",function(d){
+					return yScale(d);
+				})
+				.attr("fill", function(d) {
+					return "rgb(0,0," + (d*10) + ")";
+				});
+
+				svg.selectAll("text")
+				.data(dataset)
+				.transition()
+				.delay(function(d,i){
+					return i/dataset.length * 1000;
+				})
+				.duration(3000)
+				.ease("elastic") //options include linear, circle, elastic, bounce
+				.text(function(d){
+					return d;
+				})
+				.attr("x",function(d,i){
+					return xScale(i) + xScale.rangeBand() / 2;
+				})
+				.attr("y",function(d){
+					return h - yScale(d) + 14;
+				})
 			});
-
-			svg.selectAll("text")
-			.data(dataset)
-			.enter()
-			.append("text")
-			.text(function(d){
-				return d;
-			})   
-			.attr("x", function(d, i) {
-				return i * (w / dataset.length) + (w/dataset.length-barPadding)/2; //halfway across
-			})
-			.attr("y", function(d) {
-				return h - (d * 4) + 14;
-			})
-			.attr("font-family","sans-serif")
-			.attr("fill","white")
-			.attr("font-size","11px")
-			.attr("text-anchor","middle");
-
-
-			var wscatter = 500;
-			var hscatter = 300;
-			var padding = 20;
-			
-			var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
-			11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
-			
-
-
-
 
 		</script>
 	</body>
-	</html> 
+</html> 
