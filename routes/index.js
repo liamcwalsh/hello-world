@@ -44,3 +44,6 @@ router.get('/barchart',function(req,res,next){
 
 router.get('/scatter',function(req,res,next){
 	res.render('scatterplot',{title: 'SVG Scatter'});});
+
+router.get('/tooltipex',function(req,res,next){
+	res.render('tooltipex',{title: 'ToolTip Demo'});});
