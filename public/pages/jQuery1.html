@@ -3,6 +3,10 @@
 <head>
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bower_components/jquery.easing/js/jquery.easing.min.js"></script>
+	<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/bower_components/jquery.scrollTo/jquery.scrollTo.min.js"></script>
+	<script type="text/javascript" scr="/bower_components/jScrollPane/script/jquery.jscrollpane.min.js"></script>
+	<link rel='stylesheet' href="/bower_components/jScrollPane/style/jquery.jscrollpane.css">
 	<style>
 		.zebra {
 			background-color: #dddddd;
@@ -48,46 +52,70 @@
 			padding-left: 20px;
 		}
 
-		#navigation {	
-			margin: 0 0 10px 0;
-			padding: 0;
-			list-style-type: none;	
-			position: relative;
-			z-index: 1;
 
-			/* overwrite base */
-			float: none;
-			width: 100%;
+		#container {
+			position: relative;
 		}
 
-		#navigation ul {
+		#navigation {
+			position:absolute;
+			width: inherit;
+			top: 0; 
+			right: 0;
 			margin: 0;
-			padding: 0;
 		}
 
 		#navigation li {
-			display: inline;
-			margin: 0;
+			height:20px;
+			float:left;
+			list-style-type: none;
+			width:70px;
+			padding:3px;
+			border-right:1px solid #3687AF;
+			background-color: #015287;
+			background-repeat: no-repeat;
+			background-position: center 30px;
+		}
+
+		#navigation ul {
 			padding: 0;
+			margin: 0;
 		}
 
-		#navigation a {
-			color: #015287;
-			display: inline-block;
-			padding: 5px;
-			text-decoration: none;
+		#navigation li a {
+			color: #FFFFFF;
 		}
 
-		#navigation_blob {
-			top: 0;
-			background-color: #c0ffee;
-			position: absolute;
-			z-index: -1;
+		#navigation #home {
+			background-image:url('/images/blog/home_icon.png');
+		}
+		#navigation #about {
+			background-image:url('icon_about.png');
+		}
+		#navigation #buy {
+			background-image:url('icon_buy');
+		}
+		#navigation #gifts {
+			background-image:url('icon_gifts');
 		}
 
 		p#intro {
 			clear: both;
 			margin-top: 10px;
+		}
+		
+		#fine_print {
+			height: 6em;
+			overflow: auto;
+			width: 100%;
+		}
+
+		#fine_print p:first-child {
+			margin-top: 0;
+		}
+
+		.jspVerticalBar {
+			width: 10px !important;
 		}
 	</style>
 </head>
@@ -97,7 +125,8 @@
 			$('#celebs tr:even').addClass('zebra') // tr:even selects the even numbers, 												  // addClass adds zebra div tag
 			$('<input type="button" value ="Hide" id="toggleButton">').insertAfter('#disclaimer');
   		// Here we create a new button in the HTML with jQuery
-  		$('p:first').hide().slideDown('slow').delay(2000).fadeOut();
+  		$('p:first').effect('shake',{times:3},300).effect('highlight',{},3000)
+  		.hide('explode',{},1000);
   		
   			$('<strong>START!</strong>').prependTo('#disclaimer'); //Add to beginning of disclaimer
   			
@@ -130,47 +159,23 @@
 				$(this).next().fadeIn();
 			});
 
-			$('<div id="navigation_blob></div').css({
-				width: $('#navigation li:first a').width() + 10,
-				height:$('#navigation li:first a').height() + 10
-			}).appendTo('#navigation');
-
-			$('<div id="navigation_blob"></div>').css({
-				width: 0,
-				height: $('#navigation li:first a').height() + 10
-			}).appendTo('#navigation');
-
-			$('#navigation a').hover(function () {// Mouse over function
-				$('#navigation_blob').animate(
-					{	
-						width: $(this).width() + 10, 
-						left: $(this).position().left
-					},
-					{
-						duration: 'slow', 
-						easing: 'easeOutBounce',
-						queue: false
-					});
-
-      		}, function() {// Mouse out function
-      			$('#navigation_blob').animate(
-      			{
-      				width: $(this).width() + 10, 
-      				left: $(this).position().left
-      			},
-      			{
-      				duration:'slow', 
-      				easing: 'easeOutCirc', 
-      				queue: false
-      			})
-      			.animate(
-      			{
-      				left: $('#navigation li:first a').position().left
-      			}, 'fast' 
-      			);
-      		}
-      		);
-
+			$(document).ready(function() {
+				$( '#navigation li' ).hover(function() {
+					$(this)
+					.stop(true)
+					.animate({height: '60px'},
+						{duration: 600, easing: 'easeOutBounce'}
+						)
+				},function() {
+					$(this)
+					.stop(true)
+					.animate(
+						{height:'20px'},
+						{duration:600, easing: 'easeOutCirc'}
+						)
+				});
+			});
+			//You can get jQuery to have items scroll with you, similar to absolute positioning, except it deosnt have to start at the top. Looks cool
   		//You can animate color, but that requires the jQuery color plugin
   		$('#bio > div').hide(); // the > is called the child selector. It selects all of 								 the div tags directly under #bio, rather than every div 								 ag in the whole bio div
   		
@@ -178,6 +183,15 @@
   			$(this).next().animate(
   				{'height': 'toggle'}, 'slow','easeOutBounce');
   		});
+
+  		$('a[href=#]').click(function(e) { //the brackets around href are attr selectors
+  			$.scrollTo(0,'slow');			//You can scroll to any place, even relative values
+  			e.preventDefault();				// like +=50px
+  		});
+
+  		$('#fine_print').jScrollPane({
+  			verticalGutter: 20
+    	}); 					//Installing a custom scroll bar
 
   	});									
 </script>
@@ -187,7 +201,7 @@
 </h2>
 <div id="navigation">
 	<ul>
-		<li><a href="#">Home</a></li>
+		<li id="home"><a href="#">Home</a></li>
 		<li><a href="#">Buy Now!</a></li>
 		<li><a href="#">About Us</a></li>
 		<li><a href="#">Gift Ideas</a></li>
@@ -310,6 +324,7 @@
 	<p>
 		&copy; Copyright 2010 CelebriTracker Productions
 	</p>
+	<a href="#">Top of page</a>
 </div>
 </div>
 </body>
