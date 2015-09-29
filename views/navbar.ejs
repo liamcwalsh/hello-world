@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title>No Bootstrap</title>
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/katex/dist/katex.min.js"></script>
-    <link rel='stylesheet' href='/stylesheets/cerulean.min.css' />
+    <link rel='stylesheet' href='bower_components/katex/dist/katex.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel='stylesheet' href='bower_components/katex/dist/katex.min.css'/>
-    <link rel="shortcut icon" href="/images/favicon.ico">
-    
-  </head>
-   <style> 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css">
+    <link rel='stylesheet' href='/stylesheets/cerulean.min.css' />
+   </head>
+   <style>
    body {
  
   width: 100%;
  
-  margin: 0 auto;
-
-  background-color: white;
-
-   }
+  margin: 0 auto; }
  
 nav {
  
@@ -42,7 +37,7 @@ nav ul li {
  
   float: left;
  
-  width: 50%; }
+  width: 25%; }
  
 nav ul li a {
  
@@ -107,46 +102,59 @@ nav ul li a:active {
 }
  
   </style>
-  <body>
-  <br><br><br>
 
-<div class="blog title">
-<h1>Welcome!</h1>
-</div>
-<br>
-<div class="blog content">
-<p> This is my blog. Here, I post about various math topics I have researched. </p>
-<p> In addition to the posts below, I collaborated with Dr. Sheth-Voss of <a href="http://www.protobi.com">Protobi, inc</a> and Giulia Hamacher on a problem concerning open-ended responses in surveys. Read about it <a href="http://protobi.com/post/empirical-analysis-of-verbatim-coding"> here.</a></p>
+   <body>
 
-<h3> Post Navigation </h3>
-
-<div class="consist">
-<p> Coming soon: Fun with the Lambert W Function </p>
-</div>
-
-<p> <a href="/discrete_choice"> Discrete Choice Price Optimization </a> </p>
-
-<p> <a href ="/opt_approx"> Approximating the Lambert W Function and Optimal Price </a></p>
-
-
-
-</div>
 <nav>
   <ul>
     <li>
-       <a href="/">Liam's Blog</a>
+       <a href="/">Home</a>
     </li>
     <li>
-      <a href="/about">About</a>
+      <a href="#">Previous: Discrete Choice . . .</a>
+    </li>
+    <li>
+      <a href="#">Next</a>
+    </li>
+    <li>
+      <a href="#">Search</a>
     </li>
   </ul>
 </nav>
+<br>
+<br>
+<div class="blog content">
+<h1>Approximating the Lambert W Function</h1>
+</div>
 
+<div class="blog content">
+<p> The main reason why the explicit equation is too slow to use is because of the Lambert W function. The implementation which MATLAB employs is slow, resulting in a larger runtime. </p>
 
-<script type="text/javascript">
-$(".katex").each(function() {
-  katex.render(this.innerHTML, this, {displayMode: true });
-});
-</script>
-  </body>
-</html>
+<p> However, if you look at a graph of W(e^x), you can notice one thing right away: </p>
+
+<div class="images">
+<img src="/images/blog/lambertapprox/lambert_exp_graph.png" width="700px" height="400px"/>
+</div>
+
+<p> The graph is nearly linear, which would indicate that perhaps there exists a fairly simple approximation to the Lambert W function, which could significantly improve the runtime of the analytic calculation fo the optimal price. </p>
+
+## First Order Approximation
+
+<p> <a href="http://mathworld.wolfram.com/LambertW-Function.html"> According to Wolfram Mathworld</a>, The Lambert W function W(x) has a first order approximation of the form: </p>
+
+<span class="katex"> W(x)=ln(x) - ln(ln(x))+ o(1) </span>
+
+<p> Then, since we want to approximate W(e^x), this simplifies to: </p>
+
+<span class="katex"> W(e^x)=x-ln(x) +o(1) </span>
+
+<p> This approximation is fairly accurate. The graph below shows W(e^x)/(x-ln(x)), which approaches 1 as the approximation becomes more accurate: </p>
+
+<div class="images">
+<img src="/images/blog/lambertapprox/1st_ord_lambapprox.png" width="700px" height="400px"/>
+</div>
+<br>
+
+<p>Clearly, this approximation is not perfect. To be more precise, when x=4, the error between the approximation and the actual value was 10.86%. </p>
+</div>
+</body>

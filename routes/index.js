@@ -47,3 +47,6 @@ router.get('/scatter',function(req,res,next){
 
 router.get('/tooltipex',function(req,res,next){
 	res.render('tooltipex',{title: 'ToolTip Demo'});});
+
+router.get('/about',function(req,res,next){
+	res.render('about',{title: 'About'});});
